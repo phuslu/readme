@@ -1,0 +1,18 @@
+[Unit]
+Description=demoserver
+
+[Service]
+Type=simple
+Environment="PYTHONDONTWRITEBYTECODE=x"
+WorkingDirectory=/home/phuslu/demoserver
+ExecStart=/usr/bin/demoserver -logfile /dev/stdout
+Restart=always
+LimitCORE=infinity
+LimitNOFILE=100000
+LimitNPROC=100000
+#User=nobody
+User=%i
+Group=users
+
+[Install]
+WantedBy=multi-user.target

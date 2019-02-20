@@ -1,0 +1,136 @@
+<!-- markdown for nginx, see https://phuslu.github.io -->
+<script>
+!function(){
+	var render_readme = true
+	var dom = {
+		element: null,
+		get: function (o) {
+			var obj = Object.create(this)
+			obj.element = (typeof o == "object") ? o : document.createElement(o)
+			return obj
+		},
+		add: function (o) {
+			var obj = dom.get(o)
+			this.element.appendChild(obj.element)
+			return obj
+		},
+		text: function (t) {
+			this.element.appendChild(document.createTextNode(t))
+			return this
+		},
+		attr: function (k, v) {
+			this.element.setAttribute(k, v)
+			return this
+		}
+	}
+
+	if (!document.head) return
+	head = dom.get(document.head)
+	head.add('meta').attr('charset', 'utf-8')
+	head.add('meta').attr('name', 'viewport').attr('content', 'width=device-width,initial-scale=1')
+
+	if (!document.body) {
+		document.write(["<div class=\"container\">",
+		"<h3>nginx.conf</h3>",
+		"<textarea rows=6 cols=50>",
+		"# download markdown.html to /wwwroot",
+		"location ~ \\.md$ {",
+		"    default_type text/html;",
+		"    add_after_body /markdown.html;",
+		"}",
+		"</textarea>",
+		"</div>"].join("\n"))
+		return
+	}
+
+	var bodytext = document.body.innerHTML
+	document.body.innerHTML = ''
+
+	div = dom.get('div').attr('class', 'container')
+
+	div.add('script').attr('src', 'https://cdn.jsdelivr.net/npm/marked')
+	div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
+
+	title = decodeURIComponent(document.location.pathname.replace(/.*\//, '').replace(/\.html$/, ''))
+	document.title = '《' + title.replace(/\.md$/, '') + '》'
+	tbody = div.add('table').add('tbody')
+	tbody.add('tr').add('th').text(title).attr('class', 'octicon-book')
+	tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
+
+	wait = function (name, callback) {
+		var interval = 10; // ms
+		window.setTimeout(function() {
+			if (window[name]) {
+				callback(window[name])
+			} else {
+				window.setTimeout(arguments.callee, interval)
+			}
+		}, interval)
+	}
+	wait('marked', function() {
+		document.getElementById("readme").innerHTML = marked(bodytext)
+	})
+
+	document.body.appendChild(div.element)
+}()
+</script>
+
+<style>
+body {
+	margin: 0;
+	font-family: "ubuntu", "Tahoma", "Microsoft YaHei", Arial, Serif;
+}
+.markdown-body {
+	float: left;
+	font-family: "ubuntu", "Tahoma", "Microsoft YaHei", Arial, Serif;
+}
+.container {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 80%;
+	}
+}
+@media (min-width: 992px) {
+	.container {
+		max-width: 70%;
+	}
+}
+@media (min-width: 1200px) {
+	.container {
+		max-width: 60%;
+	}
+}
+table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	padding: 0;
+	border-collapse: collapse;
+}
+table th {
+	font-size: 14px;
+}
+table tr {
+	border: 1px solid #ddd;
+	padding: 5px;
+}
+table th, table td {
+	border: 1px solid #ddd;
+	font-size: 14px;
+	line-height: 20px;
+	padding: 3px;
+	text-align: left;
+}
+.octicon-book {
+	background-position: center left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3,5 L7,5 L7,6 L3,6 L3,5 L3,5 Z M3,8 L7,8 L7,7 L3,7 L3,8 L3,8 Z M3,10 L7,10 L7,9 L3,9 L3,10 L3,10 Z M14,5 L10,5 L10,6 L14,6 L14,5 L14,5 Z M14,7 L10,7 L10,8 L14,8 L14,7 L14,7 Z M14,9 L10,9 L10,10 L14,10 L14,9 L14,9 Z M16,3 L16,12 C16,12.55 15.55,13 15,13 L9.5,13 L8.5,14 L7.5,13 L2,13 C1.45,13 1,12.55 1,12 L1,3 C1,2.45 1.45,2 2,2 L7.5,2 L8.5,3 L9.5,2 L15,2 C15.55,2 16,2.45 16,3 L16,3 Z M8,3.5 L7.5,3 L2,3 L2,12 L8,12 L8,3.5 L8,3.5 Z M15,3 L9.5,3 L9,3.5 L9,12 L15,12 L15,3 L15,3 Z' /%3E%3C/svg%3E");
+}
+</style>

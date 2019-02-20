@@ -1,0 +1,17 @@
+{
+	"atomic_save": false,
+	"auto_match_enabled": false,
+	"color_scheme": "Packages/Color Scheme - Default/Monokai.tmTheme",
+	"font_face": "consolas",
+	"font_size": 12.5,
+	"highlight_modified_tabs": true,
+	"word_wrap": false,
+	"bold_folder_labels": true,
+	"ignored_packages":
+	[
+		"Vintage"
+	],
+	"show_encoding": true,
+	"show_line_endings": true,
+	"trim_trailing_white_space_on_save": false
+}

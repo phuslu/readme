@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<link rel="dns-prefetch" href="//query.yahooapis.com/" />
+<link rel="dns-prefetch" href="//www.bing.com/" />
+<meta name="robots" content="noindex">
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<title>首页 - 今日壁纸</title>
+<style>
+body {
+	margin: 0;
+	background: #515151;
+	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
+}
+
+.container {
+	position: relative;
+	margin: 0 auto;
+}
+
+.container img {
+	vertical-align: middle;
+	resize: both;
+	width: 100%;
+}
+
+.container .banner {
+	position: absolute;
+	top: 0;
+	background: rgba(0, 0, 0, 0.5);
+	color: #f1f1f1;
+	width: 100%;
+	padding: 0px;
+}
+</style>
+
+<div class="container">
+	<div class="banner"><p>【加载中】</p></div>
+</div>
+
+<script type="text/javascript">
+function pixiv(data) {
+	var imgs = []
+
+	works = data.query.results.json.response.works
+	for (var i = 0; i < works.length; i++) {
+		work = works[i].work
+		if (work.width < 1280 || work.width < work.height)
+			continue
+		imgs.push({title: work.title, url: work.image_urls.large, created_time: work.created_time.replace(' ', 'T')})
+	}
+
+	imgs.sort(function (img1, img2) { return Date.parse(img2.created_time) - Date.parse(img1.created_time) })
+	//console.log(imgs)
+
+	img = document.createElement("img")
+	img.src = imgs[0].url
+	document.getElementsByClassName('container')[0].appendChild(img)
+	document.getElementsByTagName('p')[0].innerHTML = '【pixiv 动漫美图】' + imgs[0].title
+}
+
+function bing(data) {
+	copyright = data.query.results.json.images.copyright
+	title = (/今日/.test(copyright) ? '' : '【今日壁纸】') + copyright.replace(/\s*\(.+?\)$/, '')
+	img = document.createElement("img")
+	img.src = 'https://www.bing.com' + data.query.results.json.images.url
+	document.getElementsByClassName('container')[0].appendChild(img)
+	document.getElementsByTagName('p')[0].innerHTML = title
+}
+
+function w360(data) {
+	var imgs = []
+
+	data = data.query.results.json.data
+	for (var i = 0; i < data.length; i++) {
+		if (!/^(美女|4K|动漫|游戏|风景)/.test(data[i].utag))
+			continue
+		imgs.push({title: data[i].utag, url: data[i].url})
+	}
+
+	i = Math.floor(imgs.length * Math.random());
+	img = document.createElement("img")
+	img.src = imgs[i].url
+	document.getElementsByClassName('container')[0].appendChild(img)
+	document.getElementsByTagName('p')[0].innerHTML = '【360 精选壁纸】' + imgs[i].title
+}
+
+function moe(data) {
+	style = data.query.results.result
+	img = document.createElement("img")
+	img.src = style.match(/https:\/\/[^)]+/)[0].replace('&amp;', '&')
+	document.getElementsByClassName('container')[0].appendChild(img)
+	document.getElementsByTagName('p')[0].innerHTML = '【每日动漫美图】'
+}
+
+!function() {
+	callback = location.search ? location.search.substring(1) : "bing"
+
+	switch (callback) {
+	case "bing":
+		statement = "select * from json where url='https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'"
+		break
+	case "pixiv":
+		statement = "select * from json where url='https://api.pixiv.moe/v1/ranking'"
+		break
+	case "360":
+		callback = "w360"
+	case "w360":
+		statement = "select * from json where url='http://wallpaper.apc.360.cn/index.php?c=WallPaper&a=getAppsByOrder&order=create_time&start=0&count=100&from=360chrome'"
+		break
+	case "moe":
+		statement = "use 'https://raw.githubusercontent.com/yql/yql-tables/master/data/htmlstring.xml' as htmlstring;"
+		statement += "select * from htmlstring where url='https://moe.kiteorg.com' and xpath='//div[@class=\"header-bg\"]/@style'"
+		break
+	default:
+		document.getElementsByTagName('p')[0].innerHTML = '【加载失败】'
+		return
+	}
+
+	script = document.createElement("script")
+	script.src = "https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(statement) + "&format=json&callback=" + callback
+	document.body.appendChild(script)
+
+	setTimeout(function () {
+		if (document.getElementsByTagName('img').length > 0) return
+		document.getElementsByTagName('p')[0].innerHTML += '．'
+		setTimeout(arguments.callee, 500)
+	}, 500)
+}()
+</script>
