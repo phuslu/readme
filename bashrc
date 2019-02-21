@@ -1,5 +1,5 @@
 
-# wget -O- https://phuslu.github.io/bashrc | grep '^# curl' | cut -b3- | bash -xe
+# wget -O- https://phuslu.github.io/bashrc | grep '^# curl' | cut -b3- | bash -xe && . ~/.bashrc
 # curl https://phuslu.github.io/bashrc | tee -a ~/.bashrc
 # curl -fo ~/.z.sh https://raw.githubusercontent.com/rupa/z/master/z.sh
 # curl -fo ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
