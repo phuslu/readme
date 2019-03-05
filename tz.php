@@ -142,63 +142,6 @@ function get_sockstat()
 	return $info;
 }
 
-function get_ip_location_cn($ip)
-{
-	if (function_exists('curl_init'))
-	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, "http://cn.ip.cn/?ip=" . $ip);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		curl_setopt($ch, CURLOPT_USERAGENT, "curl/7.55.1");
-		$result = curl_exec($ch);
-		if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-			$result = '';
-		}
-		curl_close($ch);
-	}
-	else
-	{
-		$options = array('http'=>array('method'=>"GET", 'header'=>"User-Agent: curl/7.55.1\r\n"));
-		$result = file_get_contents('http://cn.ip.cn/?ip=' . $ip, false, stream_context_create($options));
-		if ($result === false) {
-			$result = '';
-		}
-	}
-	$location = trim(substr($result, strrpos($result, '：')+3));
-	return substr($location, 0, 100);
-}
-
-function get_ip_location_us($ip)
-{
-	if (function_exists('curl_init'))
-	{
-		$ch = curl_init();
-		curl_setopt($ch, CURLOPT_URL, 'http://ip-api.com/csv/'.$ip);
-		curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-		$result = curl_exec($ch);
-		curl_close($ch);
-		if (curl_getinfo($ch, CURLINFO_HTTP_CODE) != 200) {
-			$result = '';
-		}
-	}
-	else
-	{
-		$options = array('http'=>array(
-			'method'=>'GET',
-			'header'=>"User-Agent: curl/7.55.1\r\n"));
-		$result = file_get_contents('http://ip-api.com/csv/'.$ip, false, stream_context_create($options));
-		if ($result === false) {
-			$result = '';
-		}
-	}
-
-	$parts = explode(',', $result);
-	$city = str_replace('"', '', $parts[5]);
-	$isp = str_replace('"', '', $parts[10]);
-
-	return $city . ' - ' . $isp;
-}
-
 function get_cpuinfo()
 {
 	$info = array();
@@ -504,12 +447,6 @@ if (!function_exists('json_encode'))
 switch ($_GET['method']) {
 	case 'phpinfo':
 		phpinfo();
-		exit;
-	case 'iploc':
-		$remote_addr = get_remote_addr();
-		$zh = (substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) === 'zh');
-		$iploc = $zh ? get_ip_location_cn($remote_addr) : get_ip_location_us($remote_addr);
-		echo json_encode($iploc);
 		exit;
 	case 'sysinfo':
 		echo json_encode(array(
@@ -907,14 +844,20 @@ $ = function(s) {
 	return dom.get(document.getElementById(s.substring(1)))
 };
 
-$.getJSON = function (url, f) {
-	var xhr = null;
-	if (window.XMLHttpRequest) {
-		xhr = new XMLHttpRequest();
-	} else {
-		xhr = new ActiveXObject('MSXML2.XMLHTTP.3.0');
+$.getData = function (url, f) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true)
+	xhr.onreadystatechange = function() {
+		if (xhr.readyState == 4 && xhr.status == 200) {
+			f(xhr.responseText)
+		}
 	}
-	xhr.open('GET', url + '&_=' + new Date().getTime(), true)
+	xhr.send()
+}
+
+$.getJSON = function (url, f) {
+	var xhr = new XMLHttpRequest();
+	xhr.open('GET', url, true)
 	xhr.onreadystatechange = function() {
 		if (xhr.readyState == 4 && xhr.status == 200) {
 			if (window.JSON) {
@@ -991,8 +934,8 @@ function getSysinfo() {
 }
 
 function getIploc() {
-	$.getJSON('?method=iploc', function (data) {
-		$("#iploc").html(data?'('+data+')':'')
+	$.getData('https://myip.ipip.net/', function (data) {
+		$("#iploc").html('('+data.substring(data.lastIndexOf('：')+1)+')')
 	})
 }
 
