@@ -71,7 +71,7 @@
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
 			css = 'file-directory'
-		} else if (/\.(zip|7z|bz2|gz|tar|tgz|tbz2|cab)$/.test(filename)) {
+		} else if (/\.(zip|7z|bz2|gz|tar|tgz|tbz2|xz|cab)$/.test(filename)) {
 			css = 'file-zip'
 		} else if (/\.(jpg|png|bmp|gif|ico|webp|flv|mp4|mkv|avi|mkv)$/.test(filename)) {
 			css = 'file-media'
