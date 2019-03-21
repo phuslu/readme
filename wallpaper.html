@@ -1,5 +1,6 @@
+
 <!DOCTYPE html>
-<link rel="dns-prefetch" href="//query.yahooapis.com/" />
+<link rel="dns-prefetch" href="//jsonp.afeld.me/" />
 <link rel="dns-prefetch" href="//www.bing.com/" />
 <meta name="robots" content="noindex">
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
@@ -40,7 +41,7 @@ body {
 function pixiv(data) {
 	var imgs = []
 
-	works = data.query.results.json.response.works
+	works = data.response.works
 	for (var i = 0; i < works.length; i++) {
 		work = works[i].work
 		if (work.width < 1280 || work.width < work.height)
@@ -58,10 +59,10 @@ function pixiv(data) {
 }
 
 function bing(data) {
-	copyright = data.query.results.json.images.copyright
+	copyright = data.images[0].copyright
 	title = (/今日/.test(copyright) ? '' : '【今日壁纸】') + copyright.replace(/\s*\(.+?\)$/, '')
 	img = document.createElement("img")
-	img.src = 'https://www.bing.com' + data.query.results.json.images.url
+	img.src = 'https://www.bing.com' + data.images[0].url
 	document.getElementsByClassName('container')[0].appendChild(img)
 	document.getElementsByTagName('p')[0].innerHTML = title
 }
@@ -69,7 +70,7 @@ function bing(data) {
 function w360(data) {
 	var imgs = []
 
-	data = data.query.results.json.data
+	data = data.data
 	for (var i = 0; i < data.length; i++) {
 		if (!/^(美女|4K|动漫|游戏|风景)/.test(data[i].utag))
 			continue
@@ -83,32 +84,23 @@ function w360(data) {
 	document.getElementsByTagName('p')[0].innerHTML = '【360 精选壁纸】' + imgs[i].title
 }
 
-function moe(data) {
-	style = data.query.results.result
-	img = document.createElement("img")
-	img.src = style.match(/https:\/\/[^)]+/)[0].replace('&amp;', '&')
-	document.getElementsByClassName('container')[0].appendChild(img)
-	document.getElementsByTagName('p')[0].innerHTML = '【每日动漫美图】'
-}
-
 !function() {
 	callback = location.search ? location.search.substring(1) : "bing"
 
 	switch (callback) {
 	case "bing":
-		statement = "select * from json where url='https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'"
+		url = 'https://www.bing.com/HPImageArchive.aspx?format=js&idx=0&n=1&mkt=zh-CN'
 		break
 	case "pixiv":
-		statement = "select * from json where url='https://api.pixiv.moe/v1/ranking'"
+		url = 'https://api.pixiv.moe/v1/ranking'
 		break
 	case "360":
 		callback = "w360"
 	case "w360":
-		statement = "select * from json where url='http://wallpaper.apc.360.cn/index.php?c=WallPaper&a=getAppsByOrder&order=create_time&start=0&count=100&from=360chrome'"
+		url = 'http://wallpaper.apc.360.cn/index.php?c=WallPaper&a=getAppsByOrder&order=create_time&start=0&count=100&from=360chrome'
 		break
 	case "moe":
-		statement = "use 'https://raw.githubusercontent.com/yql/yql-tables/master/data/htmlstring.xml' as htmlstring;"
-		statement += "select * from htmlstring where url='https://moe.kiteorg.com' and xpath='//div[@class=\"header-bg\"]/@style'"
+		url = 'https://raw.githubusercontent.com/yql/yql-tables/master/data/htmlstring.xml'
 		break
 	default:
 		document.getElementsByTagName('p')[0].innerHTML = '【加载失败】'
@@ -116,7 +108,7 @@ function moe(data) {
 	}
 
 	script = document.createElement("script")
-	script.src = "https://query.yahooapis.com/v1/public/yql?q=" + encodeURIComponent(statement) + "&format=json&callback=" + callback
+	script.src = "https://jsonp.afeld.me/?url=" + encodeURIComponent(url) + "&callback=" + callback
 	document.body.appendChild(script)
 
 	setTimeout(function () {
@@ -126,3 +118,5 @@ function moe(data) {
 	}, 500)
 }()
 </script>
+
+
