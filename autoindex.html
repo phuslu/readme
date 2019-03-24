@@ -126,7 +126,7 @@
 		tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
 
 		var xhr = new XMLHttpRequest()
-		xhr.open('GET', location.pathname+readme, true)
+		xhr.open('GET', location.pathname.replace(/[^/]+$/, '')+readme, true)
 		xhr.onload = function() {
 			if (xhr.status >= 200 && xhr.status < 400) {
 				wait = function (name, callback) {
