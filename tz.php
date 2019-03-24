@@ -935,7 +935,7 @@ function getSysinfo() {
 
 function getIploc() {
 	$.getData('https://myip.ipip.net/', function (data) {
-		$("#iploc").html('('+data.substring(data.lastIndexOf('：')+1)+')')
+		$("#iploc").html('('+data.substring(data.lastIndexOf('：')+1).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+')')
 	})
 }
 
