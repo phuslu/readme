@@ -538,7 +538,7 @@ body {
 	<td><?php __('Hostname'); ?></td>
 	<td colspan="3"><?php $os = explode(' ', $uname); echo $os[1];?>(<?php echo $server_addr; ?>)&nbsp;&nbsp;
 		<button class="link" onclick="alert(navigator.userAgent)"><?php __('Client Infomation'); ?>:</button>
-		<?php echo $remote_addr;?>
+		<span id="remoteip"><?php echo $remote_addr;?></span>
 		<span id="iploc"></span>
 	</td>
 	</tr>
@@ -935,7 +935,14 @@ function getSysinfo() {
 
 function getIploc() {
 	$.getData('https://myip.ipip.net/', function (data) {
-		$("#iploc").html('('+data.substring(data.lastIndexOf('：')+1).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')+')')
+		remoteip = document.getElementById('remoteip').innerText
+		ip = data.match(/\d+\.\d+\.\d+\.\d+/)[0]
+		iploc = data.substring(data.lastIndexOf('：')+1).replace(/^[\s\uFEFF\xA0]+|[\s\uFEFF\xA0]+$/g, '')
+		if (ip !== remoteip) {
+			$("#iploc").html('(检测到分流代理，'+ data + ')')
+		} else {
+			$("#iploc").html('('+iploc+')')
+		}
 	})
 }
 
