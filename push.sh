@@ -10,7 +10,10 @@ for DIR in . $(ls -l | grep '^d' | awk '{print $NF}'); do
     popd
 done
 
-find . -type f -name "*.md" -not -iname "readme.md" -exec sh -c 'cat {} markdown.html >{}.html && git add {}.html' \;
+for FILE in $(find . -type f -name "*.md" -not -iname "readme.md"); do
+	cat ${FILE} markdown.html >${FILE%.*}.html
+	git add ${FILE%.*}.html
+done
 
 find . -type f -name "index.html" -exec git add "{}" \;
 
