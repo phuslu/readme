@@ -18,7 +18,7 @@ function __($message) {
 		'Port' => '端口',
 		'User' => '用户',
 		'Hostname' => '主机名称',
-		'Server Port' => '服务器端口',
+		'Server Port' => '端口',
 		'Prober Path' => '探针路径',
 		'Server Realtime Data' => '服务器实时数据',
 		'Time' => '当前时间',
@@ -519,16 +519,7 @@ body {
 
 <div class="container">
 
-<table>
-<?php if (preg_match('/\.phus\.lu$/i', $_SERVER['HTTP_HOST'])): ?>
-	<tr>
-	<th><a href="?method=phpinfo">PHP Info</a></th>
-	<th><a href="/files/"><?php __('Download'); ?></a></th>
-	<th>🔒<a href="//gateway.<?php echo $_SERVER['HTTP_HOST'];?>"><?php __('Gateway'); ?></a></th>
-	<th>🔒<a href="//grafana.<?php echo $_SERVER['HTTP_HOST'];?>/dashboard/db/system-overview?orgId=1"><?php __('Monitor'); ?></a></th>
-	</tr>
-<?php endif ?>
-</table>
+<table></table>
 
 <table>
 	<tr>
@@ -549,12 +540,12 @@ body {
 	<tr>
 	<td><?php __('OS'); ?></td>
 	<td><?php echo $distname; ?></td>
-	<td><?php __('Server Software'); ?></td>
-	<td><?php echo $_SERVER['SERVER_SOFTWARE'];?></td>
-	</tr>
-	<tr>
 	<td><?php __('Language'); ?></td>
 	<td><?php echo $LC_CTYPE=='C'?'POSIX':$LC_CTYPE;?></td>
+	</tr>
+	<tr>
+	<td><?php __('Server Software'); ?></td>
+	<td><?php echo $_SERVER['SERVER_SOFTWARE'] . " php/" . phpversion();?></td>
 	<td><?php __('Server Port'); ?></td>
 	<td><?php echo $_SERVER['SERVER_PORT'];?></td>
 	</tr>
