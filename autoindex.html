@@ -126,7 +126,7 @@
 
 	if (show_readme_md && readme != '') {
 		tbody = div.add('table').add('tbody')
-		tbody.add('tr').add('th').text(readme).attr('class', 'octicon-book')
+		tbody.add('tr').add('th').attr('class', 'octicon octicon-book').text(readme)
 		tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
 
 		var xhr = new XMLHttpRequest()
