@@ -7,8 +7,8 @@ ROOT="$(cd "$(dirname "$0")"; pwd -P)"
 function index() {
 	(
 		echo '<title>Index of /</title>'
-		find . -maxdepth 1 -type d -not -path '*/\.*' -not -path . -printf '<a href="%f/">%f/</a> %Td-%Tb-%TY %TH:%TM %s\n'
-		find . -maxdepth 1 -type f -printf '<a href="%f">%f</a> %Td-%Tb-%TY %TH:%TM %s\n'
+		find -L . -maxdepth 1 -type d -not -path '*/\.*' -not -path . -not -name '@*' -printf '<a href="%f/">%f/</a> %Td-%Tb-%TY %TH:%TM %s\n'
+		find -L . -maxdepth 1 -type f -not -name index.html -printf '<a href="%f">%f</a> %Td-%Tb-%TY %TH:%TM %s\n'
 		cat ${ROOT}/autoindex.html
 	) >index.html
 }
