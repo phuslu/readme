@@ -11,7 +11,7 @@ done
 
 for DIR in . $(ls -l | grep '^d' | awk '{print $NF}'); do
     pushd ${DIR}
-    ls -phl --time-style='+%d-%b-%Y %H:%M' --group-directories-first | awk 'BEGIN{print "<title>Index of /</title>"}{printf("<a href=\"%s\">%s</a>\t%s %s %s\n", $8, $8, $6, $7, $5)}' >index.html
+    ls -phl --time-style='+%d-%b-%Y %H:%M' --ignore index.html --group-directories-first | awk 'BEGIN{print "<title>Index of /</title>"}{printf("<a href=\"%s\">%s</a>\t%s %s %s\n", $8, $8, $6, $7, $5)}' >index.html
     cat /opt/home/phuslu.github.io/autoindex.html >>index.html
     git add index.html
     popd
