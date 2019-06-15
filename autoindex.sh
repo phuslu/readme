@@ -17,7 +17,6 @@ function gen() {
 
 function push() {
 	bash $0 gen
-	find . -type d -not -path '*/\.*' -exec bash -c "cd {} && git add x" \;
 	git commit -m "[skip ci] build new index" -s -a || true
 	git push origin master
 }
