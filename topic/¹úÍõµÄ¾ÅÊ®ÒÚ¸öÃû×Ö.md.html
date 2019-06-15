@@ -1,0 +1,151 @@
+王国里第一条禁令是国王的名字，说出来就会掉脑袋，但是王国里除了国王之外并没有别的话题，于是人们为国王编出昵称。
+
+国王的名字可以用词法学方式重组、倒装，在王国里长大的孩子看懂了，就刻在墙上、写在碎纸条上让风吹走，让牧羊的孩子捡起来。国王的名字有很多的同音词，于是牧羊的孩子把这些词编成了歌，从南到北传唱了很多年。
+
+国王发现了之后，下令禁止传颂一切指代他的名字，国王的人出动，不少谐音谐形的词遭了秧，不少字典付之一炬。
+
+后来国王的名字只能通过比喻和寓言来指涉。比喻像是一个离家很远的人通过电话给一个盲人指路，寓言像是一个没有去过法国的人梦见了巴黎的每一块砖每一块瓦。首长、司机、龙尾骨、迎客松、复仇、壶、湖、上上签、大人、内人、讽刺剧、莎士比亚、智利人、下水、他、他们、你。聪明的比喻家连代词都要加以利用。
+
+国王发现了之后，下令组建意义委员会，审查意义。委员会的成员们抓着光秃秃的脑壳，日夜兼程地解读世界上所有的文字，挖掘一切潜在含义。在诠释的道路上，委员们死死追着比喻家。委员抓住一个比喻，比喻家就造出一个新的词。
+
+最后一天，比喻家发现意义用完了。国王的名字用尽了世界上所有的意义。委员会气喘吁吁地把比喻家埋了，但是这个时候，国王的名字已经世人皆知了。街上的每一个人都知道国王的名字，尽管他们说不出来。尽管他们说不出这个名字，他们在谈论花鸟树木的时候，却总是在阳否阴述地谈论国王。委员们看得目瞪口呆。
+
+国王发现了之后，下令禁止一切语言。王国里每一个人的嘴都闭上了，但是让委员会没想到的是，国王的名字在包括了所有意义之后也成为了沉默。国王的原名不再重要，国王现在有无数个名字，无数个名字包括了人类声道能发出的一切声音的一切组合，也包括沉默。王国里每一个人的嘴都闭上了，这个王国里的沉默震耳欲聋。
+
+国王的真名响彻宇宙
+<!-- markdown for nginx, see https://phuslu.github.io -->
+<script>
+!function(){
+	var render_readme = true
+	var dom = {
+		element: null,
+		get: function (o) {
+			var obj = Object.create(this)
+			obj.element = (typeof o == "object") ? o : document.createElement(o)
+			return obj
+		},
+		add: function (o) {
+			var obj = dom.get(o)
+			this.element.appendChild(obj.element)
+			return obj
+		},
+		text: function (t) {
+			this.element.appendChild(document.createTextNode(t))
+			return this
+		},
+		attr: function (k, v) {
+			this.element.setAttribute(k, v)
+			return this
+		}
+	}
+
+	if (!document.head) return
+	head = dom.get(document.head)
+	head.add('meta').attr('charset', 'utf-8')
+	head.add('meta').attr('name', 'viewport').attr('content', 'width=device-width,initial-scale=1')
+
+	if (!document.body) {
+		document.write(["<div class=\"container\">",
+		"<h3>nginx.conf</h3>",
+		"<textarea rows=6 cols=50>",
+		"# download markdown.html to /wwwroot",
+		"location ~ \\.md$ {",
+		"    default_type text/html;",
+		"    add_after_body /markdown.html;",
+		"}",
+		"</textarea>",
+		"</div>"].join("\n"))
+		return
+	}
+
+	var bodytext = document.body.innerHTML
+	document.body.innerHTML = ''
+
+	div = dom.get('div').attr('class', 'container')
+
+	div.add('script').attr('src', 'https://cdn.jsdelivr.net/npm/marked')
+	div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
+
+	title = decodeURIComponent(document.location.pathname.replace(/.*\//, '').replace(/\.html$/, ''))
+	document.title = '《' + title.replace(/\.md$/, '') + '》'
+	tbody = div.add('table').add('tbody')
+	tbody.add('tr').add('th').text(title).attr('class', 'octicon-book')
+	tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
+
+	wait = function (name, callback) {
+		var interval = 10; // ms
+		window.setTimeout(function() {
+			if (window[name]) {
+				callback(window[name])
+			} else {
+				window.setTimeout(arguments.callee, interval)
+			}
+		}, interval)
+	}
+	wait('marked', function() {
+		document.getElementById("readme").innerHTML = marked(bodytext)
+	})
+
+	document.body.appendChild(div.element)
+}()
+</script>
+
+<style>
+body {
+	margin: 0;
+	font-family: "ubuntu", "Tahoma", "Microsoft YaHei", Arial, Serif;
+}
+.markdown-body {
+	float: left;
+	font-family: "ubuntu", "Tahoma", "Microsoft YaHei", Arial, Serif;
+}
+.container {
+	padding-right: 15px;
+	padding-left: 15px;
+	margin-right: auto;
+	margin-left: auto;
+}
+@media (min-width: 768px) {
+	.container {
+		max-width: 80%;
+	}
+}
+@media (min-width: 992px) {
+	.container {
+		max-width: 70%;
+	}
+}
+@media (min-width: 1200px) {
+	.container {
+		max-width: 60%;
+	}
+}
+table {
+	width: 100%;
+	max-width: 100%;
+	margin-bottom: 20px;
+	border: 1px solid #ddd;
+	padding: 0;
+	border-collapse: collapse;
+}
+table th {
+	font-size: 14px;
+}
+table tr {
+	border: 1px solid #ddd;
+	padding: 5px;
+}
+table th, table td {
+	border: 1px solid #ddd;
+	font-size: 14px;
+	line-height: 20px;
+	padding: 3px;
+	text-align: left;
+}
+.octicon-book {
+	background-position: center left;
+	background-repeat: no-repeat;
+	padding-left: 20px;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3,5 L7,5 L7,6 L3,6 L3,5 L3,5 Z M3,8 L7,8 L7,7 L3,7 L3,8 L3,8 Z M3,10 L7,10 L7,9 L3,9 L3,10 L3,10 Z M14,5 L10,5 L10,6 L14,6 L14,5 L14,5 Z M14,7 L10,7 L10,8 L14,8 L14,7 L14,7 Z M14,9 L10,9 L10,10 L14,10 L14,9 L14,9 Z M16,3 L16,12 C16,12.55 15.55,13 15,13 L9.5,13 L8.5,14 L7.5,13 L2,13 C1.45,13 1,12.55 1,12 L1,3 C1,2.45 1.45,2 2,2 L7.5,2 L8.5,3 L9.5,2 L15,2 C15.55,2 16,2.45 16,3 L16,3 Z M8,3.5 L7.5,3 L2,3 L2,12 L8,12 L8,3.5 L8,3.5 Z M15,3 L9.5,3 L9,3.5 L9,12 L15,12 L15,3 L15,3 Z' /%3E%3C/svg%3E");
+}
+</style>
