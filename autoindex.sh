@@ -12,10 +12,11 @@ function index() {
 }
 
 function gen() {
-	find . -type d -not -path '*/\.*' -exec bash -c "cd {} && $ROOT/$0 index" \;
+	find . -type d -not -path '*/\.*' -exec bash -c "cd {} && $ROOT/$0 index && git add index.html" \;
 }
 
 function push() {
+	$ROOT/$0 gen
 	git commit -m "[skip ci] build new index" -s -a || true
 	git push origin master
 }
