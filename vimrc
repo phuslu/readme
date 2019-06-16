@@ -1,5 +1,6 @@
 " syntax
 syntax on
+colorscheme desert
 
 " history : how many lines of history VIM has to remember
 set history=2000
@@ -80,7 +81,6 @@ set backspace=indent,eol,start  " make that backspace key work the way it should
 set whichwrap+=<,>,h,l
 
 set background=dark
-colorscheme desert
 
 " set mark column color
 hi! link SignColumn   LineNr
