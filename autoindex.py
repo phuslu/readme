@@ -24,11 +24,9 @@ def index():
         autoindex_html = file.read().decode('utf-8')
     for root, dirs, files in os.walk(u'.', topdown=True):
         html = u'<meta charset="UTF-8"><title>Index of /{}</title>\n'.format(root[1:].strip('\\/'))
-        for name in dirs:
+        for name in sorted(dirs) + sorted(files):
             if name.startswith(('.', '@')):
                 continue
-            html += u'<a href="{0}/">{0}/</a> {1} 0\n'.format(name, *_get_date_size(os.path.join(root, name)))
-        for name in files:
             if name in ('index.html', 'autoindex.py'):
                 continue
             html += u'<a href="{0}">{0}</a> {1} {2}\n'.format(name, *_get_date_size(os.path.join(root, name)))
