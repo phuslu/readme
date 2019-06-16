@@ -31,7 +31,7 @@ def index():
 def push():
     """main function"""
     index()
-    os.system(';'.join([
+    os.system('&&'.join([
         'git add -A .',
         'git commit -m "[skip ci] build new index" -s -a',
         'git push origin master',
