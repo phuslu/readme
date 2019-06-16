@@ -7,7 +7,7 @@
 # curl -fo ~/.vimrc https://phuslu.github.io/vimrc && sudo cp ~/.vimrc /root
 # curl -fo /tmp/vimcat https://raw.githubusercontent.com/vim-scripts/vimcat/master/vimcat && sudo mv /tmp/vimcat /usr/bin && sudo chmod +x /usr/bin/vimcat
 # curl -L https://github.com/BurntSushi/ripgrep/releases/download/0.10.0/ripgrep-0.10.0-x86_64-unknown-linux-musl.tar.gz | sudo tar xvz -C /usr/bin/ --strip-components=1 --wildcards --no-anchored rg
-# sudo env $(hash yum && echo yum || echo apt) install -y bash-completion
+# sudo env $(hash yum && echo yum || echo apt) install -y bash-completion jq htop ngrep
 if [ "${HOME%/*}" = "/Users" ]; then alias ls='ls -G' ;else alias ls='ls -p --color=auto'; fi
 alias ll='ls -lF'
 alias rm='rm -i'
