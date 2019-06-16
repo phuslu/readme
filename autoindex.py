@@ -29,7 +29,7 @@ def index():
                 continue
             html += u'<a href="{0}/">{0}/</a> {1} {2}\n'.format(name, *_get_date_size(os.path.join(root, name)))
         for name in sorted(files):
-            if name in ('index.html', 'autoindex.py'):
+            if name.startswith('.') or name in ('index.html', 'autoindex.py'):
                 continue
             html += u'<a href="{0}">{0}</a> {1} {2}\n'.format(name, *_get_date_size(os.path.join(root, name)))
         html += autoindex_html
