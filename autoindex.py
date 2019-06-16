@@ -22,7 +22,7 @@ def index():
     """generate index.html for current folder"""
     with open('autoindex.html', 'rb') as file:
         autoindex_html = file.read().decode('utf-8')
-    for root, dirs, files in os.walk(u'.', topdown=True):
+    for root, dirs, files in os.walk(u'.', topdown=True, followlinks=True):
         html = u'<meta charset="UTF-8"><title>Index of /{}</title>\n'.format(root[1:].strip('\\/'))
         for name in sorted(dirs):
             if name.startswith(('.', '@')):
