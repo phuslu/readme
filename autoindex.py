@@ -24,6 +24,8 @@ def index():
         autoindex_html = file.read().decode('utf-8')
     for root, dirs, files in os.walk(u'.', topdown=True, followlinks=True):
         html = u'<meta charset="UTF-8"><title>Index of /{}</title>\n'.format(root[1:].strip('\\/'))
+        if os.path.basename(root).startswith(('.', '@')):
+            continue
         for name in sorted(dirs):
             if name.startswith(('.', '@')):
                 continue
