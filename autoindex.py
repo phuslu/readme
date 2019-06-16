@@ -11,14 +11,14 @@ def _get_date(filename):
     return time.strftime('%d-%b-%Y %H:%M', time.localtime(os.path.getmtime(filename)))
 
 
-def _get_size(filename, suffix='o'):
+def _get_size(filename):
     """Readable file size"""
     filesize = os.path.getsize(filename)
-    for unit in ['', 'k', 'M', 'G', 'T', 'P', 'E', 'Z']:
+    for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
         if abs(filesize) < 1024.0:
-            return "%3.1f %s%s" % (filesize, unit, suffix)
+            return "%d%s" % (int(filesize), unit)
         filesize /= 1024.0
-    return "%.1f%s%s" % (filesize, 'Yi', suffix)
+    return "%d%s" % (int(filesize), 'YB')
 
 
 def index():
