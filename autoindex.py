@@ -6,19 +6,16 @@ import sys
 import time
 
 
-def _get_date(filename):
-    """Readable file time"""
-    return time.strftime('%d-%b-%Y %H:%M', time.localtime(os.path.getmtime(filename)))
-
-
-def _get_size(filename):
-    """Readable file size"""
-    filesize = os.path.getsize(filename)
+def _get_date_size(filename):
+    """return file date and size"""
+    stat_result = os.stat(filename)
+    date = time.strftime('%d-%b-%Y %H:%M', time.localtime(stat_result.st_mtime))
+    size = stat_result.st_size
     for unit in ['', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB']:
-        if abs(filesize) < 1024.0:
-            return "%d%s" % (int(filesize), unit)
-        filesize /= 1024.0
-    return "%d%s" % (int(filesize), 'YB')
+        if abs(size) < 1024.0:
+            break
+        size /= 1024.0
+    return date, '{:d}{}'.format(int(size), unit)
 
 
 def index():
@@ -30,15 +27,15 @@ def index():
         for name in dirs:
             if name.startswith(('.', '@')):
                 continue
-            html += u'<a href="{0}/">{0}/</a> {1} 0\n'.format(name, _get_date(os.path.join(root, name)))
+            html += u'<a href="{0}/">{0}/</a> {1} 0\n'.format(name, *_get_date_size(os.path.join(root, name)))
         for name in files:
             if name in ('index.html', 'autoindex.py'):
                 continue
-            fullname = os.path.join(root, name)
-            html += u'<a href="{0}">{0}</a> {1} {2}\n'.format(name, _get_date(fullname), _get_size(fullname))
+            html += u'<a href="{0}">{0}</a> {1} {2}\n'.format(name, *_get_date_size(os.path.join(root, name)))
         html += autoindex_html
         with open(os.path.join(root, 'index.html'), 'wb') as file:
             file.write(html.encode('utf-8'))
+
 
 def push():
     """main function"""
