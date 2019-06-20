@@ -23,7 +23,7 @@ def index():
     with open('autoindex.html', 'rb') as file:
         autoindex_html = file.read().decode('utf-8')
     for root, dirs, files in os.walk(u'.', topdown=True, followlinks=True):
-        html = u'<meta charset="UTF-8"><title>Index of /{}</title><pre>\n'.format(root[1:].strip('\\/'))
+        html = u'<meta charset="UTF-8"><title>Index of /{}</title><hr><pre>\n'.format(root[1:].strip('\\/'))
         if os.path.basename(root).startswith('@'):
             continue
         for name in sorted(dirs):
@@ -34,7 +34,7 @@ def index():
             if name.startswith('.') or name in ('index.html', 'autoindex.py'):
                 continue
             html += u'<a href="{0}">{0}</a> {1} {2}\n'.format(name, *_get_date_size(os.path.join(root, name)))
-        html += '</pre>\n'
+        html += '</pre><hr>\n'
         html += autoindex_html
         with open(os.path.join(root, 'index.html'), 'wb') as file:
             file.write(html.encode('utf-8'))
