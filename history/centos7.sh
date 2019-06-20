@@ -1,6 +1,6 @@
 yum install -y epel-release
 yum install -y wget rsync ngrep jq htop
-curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf && sysctl --system
+curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf
 sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 echo -e "* soft nofile 1048576\n* hard nofile 1048576" | tee /etc/security/limits.d/99-phuslu.conf
 adduser centos
@@ -10,5 +10,5 @@ echo 'ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQD4vtgNW8w0ir8rA41s18hCPAa53zQa3dwgGR
 chown -R centos:centos /home/centos/.ssh
 chmod g-w /home/centos/.ssh
 chmod 0600 /home/centos/.ssh/*
-su centos -c 'cd; curl https://phuslu.github.io/bashrc | grep ^# | tail -n +2 | cut -b3- | grep ^curl | bash -xe && . ~/.bashrc'
+su centos -c 'cd; curl https://phuslu.github.io/bashrc | grep ^# | tail -n +2 | cut -b3- | grep ^curl | bash -xe'
 
