@@ -15,15 +15,15 @@ def _get_date_size(filename):
         if abs(size) < 1024.0:
             break
         size /= 1024.0
-    return date, '{:d}{}'.format(int(size), unit)
+    return date, '%d%s' % (int(size), unit)
 
 
 def index():
     """generate index.html for current folder"""
-    with open('autoindex.html', 'rb') as file:
+    with open(os.path.splitext(os.path.abspath(__file__))[0]+'.html', 'rb') as file:
         autoindex_html = file.read().decode('utf-8')
     for root, dirs, files in os.walk(u'.', topdown=True, followlinks=True):
-        html = u'<meta charset="UTF-8"><title>Index of /{}</title><hr><pre>\n'.format(root[1:].strip('\\/'))
+        html = u'<meta charset="UTF-8"><title>Index of /%s</title><hr><pre>\n' % root[1:].strip('\\/')
         if os.path.basename(root).startswith('@'):
             continue
         for name in sorted(dirs):
