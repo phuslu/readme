@@ -1,10 +1,10 @@
 
 # curl https://phuslu.github.io/bashrc | grep ^# | tail -n +2 | cut -b3- | grep ^curl | bash -xe && . ~/.bashrc
 # curl https://phuslu.github.io/bashrc | tee -a ~/.bashrc
+# curl -fo ~/.vimrc https://phuslu.github.io/vimrc && test $USER = root || sudo cp ~/.vimrc /root
 # curl -fo ~/.z.sh https://raw.githubusercontent.com/rupa/z/master/z.sh
 # curl -fo ~/.git-prompt.sh https://raw.githubusercontent.com/git/git/master/contrib/completion/git-prompt.sh
 # curl -fo ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
-# curl -fo ~/.vimrc https://phuslu.github.io/vimrc && sudo cp ~/.vimrc /root
 # curl -fo /tmp/vimcat https://raw.githubusercontent.com/vim-scripts/vimcat/master/vimcat && sudo mv /tmp/vimcat /usr/bin && sudo chmod +x /usr/bin/vimcat
 # curl -L https://github.com/BurntSushi/ripgrep/releases/download/11.0.1/ripgrep-11.0.1-x86_64-unknown-linux-musl.tar.gz | sudo tar xvz -C /usr/bin/ --strip-components=1 --wildcards --no-anchored rg
 # sudo env $(hash yum && echo yum || echo apt) install -y bash-completion jq htop ngrep
