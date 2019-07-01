@@ -32,12 +32,10 @@
 		}
 	}
 
-	if (!document.head) return
 	head = dom.get(document.head)
 	head.add('meta').attr('charset', 'utf-8')
 	head.add('meta').attr('name', 'viewport').attr('content', 'width=device-width,initial-scale=1')
 
-	if (document.title && !document.title.startsWith('Index of /')) return
 	if (!document.title) {
 		document.write(["<div class=\"container\">",
 		"<h3>nginx.conf</h3>",
