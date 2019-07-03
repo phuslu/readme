@@ -25,6 +25,7 @@ ver | findstr /r "6\." && (
 ver | findstr /r "10\." && (
     reg add "HKCU\Console" /v CodePage /t REG_DWORD /d 65001 /f
     reg add "HKCU\Console" /v FaceName /t REG_SZ /d "Consolas" /f
+    reg add "HKCU\Console\%SystemRoot^%_system32_cmd.exe" /v CodePage /t REG_DWORD /d 65001
     reg add "HKCR\Directory\Background\shell\runas" /v "" /t REG_SZ /d "@shell32.dll,-22022" /f
     reg add "HKCR\Directory\Background\shell\runas" /v "HasLUAShield" /t REG_SZ /d "" /f
     echo %~d0 | findstr ":" && (
