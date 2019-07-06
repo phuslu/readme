@@ -24,19 +24,15 @@ function human_fileinfo($file) {
 	return $mtime . ' ' . $size;
 }
 
-$files = array();
-foreach (scandir($rootdir . $dirname) as $file)
-	if ($file[0] != '.' && $file[0] != '@' && $file != 'autoindex.php')
-		array_push($files, $file);
+$files = array_filter(scandir($rootdir . $dirname), function($file) {
+    return $file[0] != '.' && $file[0] != '@' && $file != 'autoindex.php';
+});
 
 printf("<meta charset='UTF-8'><title>Index of %s</title><hr><pre>\n", $dirname);
-foreach ($files as $file)
-	if (is_dir($file))
-		printf("<a href='%s/'>%s/</a> %s\n", $file, $file, human_fileinfo($file));
-foreach ($files as $file)
-	if (!is_dir($file))
-		printf("<a href='%s'>%s</a> %s\n", $file, $file, human_fileinfo($file));
+foreach (array_filter($files, is_dir) as $file)
+	printf("<a href='%s/'>%s/</a> %s\n", $file, $file, human_fileinfo($file));
+foreach (array_filter($files, function($k) { return !is_dir($k); }) as $file)
+	printf("<a href='%s'>%s</a> %s\n", $file, $file, human_fileinfo($file));
 printf("</pre><hr>\n");
 
 readfile($rootdir . '/autoindex.html');
-
