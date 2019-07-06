@@ -16,7 +16,7 @@ function human_filesize($file) {
 
 $files = array();
 foreach (scandir($rootdir . $dirname) as $file)
-    if ($file[0] != '.' && $file[0] != '@')
+    if ($file[0] != '.' && $file[0] != '@' && $file != 'autoindex.php')
         array_push($files, $file);
 
 printf("<meta charset='UTF-8'><title>Index of %s</title><hr><pre>\n", $dirname);
