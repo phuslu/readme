@@ -1,5 +1,35 @@
 <!-- autoindex.html 19.05, see https://phuslu.github.io -->
 <script>
+    function switchMonth(month) {
+        switch (month) {
+            case 'Jan':
+                return 0;
+            case 'Feb':
+                return 1;
+            case 'Mar':
+                return 2;
+            case 'Apr':
+                return 3;
+            case 'May':
+                return 4;
+            case 'Jun':
+                return 5;
+            case 'Jul':
+                return 6;
+            case 'Aug':
+                return 7;
+            case 'Sept':
+                return 8;
+            case 'Oct':
+                return 9;
+            case 'Nov':
+                return 10;
+            case 'Dec':
+                return 11;
+            default:
+                return month
+        }
+    }
 !function(){
 	var website_title = ''
 	var datetime_format = '%d-%b-%Y %H:%M'
@@ -107,6 +137,12 @@
 		tr.add('td').text(size)
 	}
 
+    let mdFiles = [];
+    tr = tbody.add('tr');
+    tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortByName').attr('href', '#').text('File Name ').add('span').text('↓');
+    tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortByDate').attr('href', '#').text('Date ').add('span').text('↓');
+    tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortBySize').attr('href', '#').text('Size ').add('span').text('↓');
+
 	var readme = ''
 
 	insert('../', '', '-')
@@ -119,16 +155,54 @@
 			if (filename.toLowerCase() == 'readme.md') {
 				readme = filename
 			}
+            if (filename.includes('.md')) {
+                mdFiles.push(filename);
+            }
 		}
 	}
 
 	document.body.appendChild(div.element)
 
-	if (show_readme_md && readme != '') {
-		tbody = div.add('table').add('tbody')
-		tbody.add('tr').add('th').attr('class', 'octicon octicon-book').text(readme)
-		tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
-
+	if ((show_readme_md && readme !== '') || mdFiles.length !== 0) {
+        if (readme === '') {
+            readme = mdFiles[0];
+            mdFiles.splice(mdFiles.indexOf(readme), 1);
+        } else {
+            mdFiles.splice(mdFiles.indexOf(readme), 1);
+        }
+        tbody = div.add('table').add('tbody');
+        let mdTh = tbody.add('tr').add('th').add('select');
+        mdTh.attr('id', 'mdSelect').add('option').attr('value', readme).text(readme);
+        console.log(mdFiles,readme);
+        for (let mdFile of mdFiles) {
+            mdTh.add('option').attr('value', mdFile).text(mdFile);
+        }
+        let mdSelect = document.getElementById('mdSelect');
+        mdSelect.onchange = function () {
+            let mdFileName = mdSelect.options[mdSelect.selectedIndex].value;
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', location.pathname + mdFileName, true);
+            xhr.onload = function () {
+                if (xhr.status >= 200 && xhr.status < 400) {
+                    wait = function (name, callback) {
+                        let interval = 10; // ms
+                        window.setTimeout(function () {
+                            if (window[name]) {
+                                callback(window[name])
+                            } else {
+                                window.setTimeout(arguments.callee, interval)
+                            }
+                        }, interval)
+                    };
+                    wait('marked', function () {
+                        document.getElementById("readme").innerHTML = marked(xhr.responseText)
+                    })
+                }
+            };
+            xhr.send();
+        };
+        tbody.add('tr').add('th').attr('class', 'octicon octicon-book').text(readme)
+        tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
 		var xhr = new XMLHttpRequest()
 		xhr.open('GET', location.pathname.replace(/[^/]+$/, '')+readme, true)
 		xhr.onload = function() {
@@ -153,6 +227,116 @@
 		div.add('script').attr('src', 'https://cdn.jsdelivr.net/npm/marked')
 		div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
 	}
+
+    let oTable = document.getElementsByClassName('table-hover')[0];
+    let oTbody = oTable.tBodies[0];
+    let trArray = [];//用来存放每一个tr
+    let isAsc = true;//用来判断升序，还是降序
+    for (let i = 0; i < oTbody.rows.length - 2; i++) {
+        trArray[i] = oTbody.rows[i + 2];//这里是把每一个tr存放到一个数组，而不是排序的依据（这里是cells[0].innerHTML）
+    }
+    let sortByNameATag = document.getElementById('sortByName');
+    sortByNameATag.onclick = function () {
+        trArray.sort(function (td1, td2) {
+            if (isAsc) {
+                return td1.cells[0].innerText.localeCompare(td2.cells[0].innerText);
+            } else {
+                return td2.cells[0].innerText.localeCompare(td1.cells[0].innerText);
+            }
+
+        });
+        isAsc = !isAsc;
+        let upDownSymbol = sortByNameATag.getElementsByTagName('span')[0];
+        if (upDownSymbol.innerText === '↑') {
+            upDownSymbol.innerText = '↓';
+        } else {
+            upDownSymbol.innerText = '↑';
+        }
+        let oFragment = document.createDocumentFragment(); //创建文档碎片
+        for (let j = 0; j < trArray.length; j++) {
+            oFragment.appendChild(trArray[j]);
+        }
+        oTable.appendChild(oFragment);
+    };
+    let sortByDateATag = document.getElementById('sortByDate');
+    sortByDateATag.onclick = function () {
+        trArray.sort(function (td1, td2) {
+            let datestr1 = td1.cells[1].innerText;
+            let day1 = parseInt(datestr1.split('-')[0]);
+            let month1 = switchMonth(datestr1.split('-')[1]);
+            let year1 = parseInt(datestr1.split('-')[2]);
+            let hour1 = parseInt(datestr1.split(' ')[1].split(':')[0]);
+            let minute1 = parseInt(datestr1.split(' ')[1].split(':')[1]);
+            let date1 = new Date(year1, month1, day1, hour1, minute1, 0, 0);
+
+            let datestr2 = td2.cells[1].innerText;
+            let day2 = parseInt(datestr2.split('-')[0]);
+            let month2 = switchMonth(datestr2.split('-')[1]);
+            let year2 = parseInt(datestr2.split('-')[2]);
+            let hour2 = parseInt(datestr2.split(' ')[1].split(':')[0]);
+            let minute2 = parseInt(datestr2.split(' ')[1].split(':')[1]);
+            let date2 = new Date(year2, month2, day2, hour2, minute2, 0, 0);
+
+            if (isAsc) {
+                return date1.getTime() - date2.getTime();
+            } else {
+                return date2.getTime() - date1.getTime();
+            }
+        });
+        isAsc = !isAsc;
+        let upDownSymbol = sortByDateATag.getElementsByTagName('span')[0];
+        if (upDownSymbol.innerText === '↑') {
+            upDownSymbol.innerText = '↓';
+        } else {
+            upDownSymbol.innerText = '↑';
+        }
+        let oFragment = document.createDocumentFragment(); //创建文档碎片
+        for (let j = 0; j < trArray.length; j++) {
+            oFragment.appendChild(trArray[j]);
+        }
+        oTable.appendChild(oFragment);
+    };
+    let sortBySizeATag = document.getElementById('sortBySize');
+    sortBySizeATag.onclick = function () {
+        trArray.sort(function (td1, td2) {
+            let td1InnerText = td1.cells[2].innerText;
+            let td2InnerText = td2.cells[2].innerText;
+            if (td1InnerText === '-') {
+                td1InnerText = -1;
+            }
+            if (td2InnerText === '-') {
+                td2InnerText = -1;
+            }
+            if (td1InnerText.toString().includes('M')) {
+                td1InnerText = parseInt(td1InnerText.substring(0, td1InnerText.indexOf('M'))) * 1024 * 1024;
+            }
+            if (td1InnerText.toString().includes('K')) {
+                td1InnerText = parseInt(td1InnerText.substring(0, td1InnerText.indexOf('K'))) * 1024;
+            }
+            if (td2InnerText.toString().includes('M')) {
+                td2InnerText = parseInt(td2InnerText.substring(0, td2InnerText.indexOf('M'))) * 1024 * 1024;
+            }
+            if (td2InnerText.toString().includes('K')) {
+                td2InnerText = parseInt(td2InnerText.substring(0, td2InnerText.indexOf('K'))) * 1024;
+            }
+            if (isAsc) {
+                return parseInt(td1InnerText) - parseInt(td2InnerText);
+            } else {
+                return parseInt(td2InnerText) - parseInt(td1InnerText);
+            }
+
+        });
+        isAsc = !isAsc;
+        let upDownSymbol = sortBySizeATag.getElementsByTagName('span')[0];
+        if (upDownSymbol.innerText === '↑') {
+            upDownSymbol.innerText = '↓';
+        } else {
+            upDownSymbol.innerText = '↑';
+        }
+        for (let j = 0; j < trArray.length; j++) {
+            oTbody.appendChild(trArray[j]);
+        }
+    };
 }()
 </script>
 
@@ -228,6 +412,14 @@ table.table-hover > tbody > tr:hover > th {
 	background-repeat: no-repeat;
 	padding-left: 16px;
 }
+
+.sortBy {
+    color: #5f5f5f;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 16px;
+}
+
 .file {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16' viewBox='0 0 12 16'%3E%3Cpath d='M6 5L2 5 2 4 6 4 6 5 6 5ZM2 8L9 8 9 7 2 7 2 8 2 8ZM2 10L9 10 9 9 2 9 2 10 2 10ZM2 12L9 12 9 11 2 11 2 12 2 12ZM12 4.5L12 14C12 14.6 11.6 15 11 15L1 15C0.5 15 0 14.6 0 14L0 2C0 1.5 0.5 1 1 1L8.5 1 12 4.5 12 4.5ZM11 5L8 2 1 2 1 14 11 14 11 5 11 5Z' fill='%237D94AE'/%3E%3C/svg%3E");
 }
