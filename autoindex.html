@@ -66,6 +66,10 @@
 	div = dom.get('div').attr('class', 'container')
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
+	thead = tbody.add('tr')
+	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Name');
+	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Date');
+	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
@@ -106,11 +110,6 @@
 		tr.add('td').text(datetime)
 		tr.add('td').text(size)
 	}
-
-	tr = tbody.add('tr');
-	tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortByName').attr('href', '#').text('File Name ').add('span').text('↓');
-	tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortByDate').attr('href', '#').text('Date ').add('span').text('↓');
-	tr.add('td').add('a').attr('class', 'sortBy').attr('id', 'sortBySize').attr('href', '#').text('Size ').add('span').text('↓');
 
 	var readme = ''
 	insert('../', '', '-')
@@ -157,116 +156,7 @@
 		div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
 	}
 
-	let oTable = document.getElementsByClassName('table-hover')[0];
-	let oTbody = oTable.tBodies[0];
-	let trArray = [];//用来存放每一个tr
-	let isAsc = true;//用来判断升序，还是降序
-	for (let i = 0; i < oTbody.rows.length - 2; i++) {
-		trArray[i] = oTbody.rows[i + 2];//这里是把每一个tr存放到一个数组，而不是排序的依据（这里是cells[0].innerHTML）
-	}
-	let sortByNameATag = document.getElementById('sortByName');
-	sortByNameATag.onclick = function () {
-		trArray.sort(function (td1, td2) {
-			if (isAsc) {
-				return td1.cells[0].innerText.localeCompare(td2.cells[0].innerText);
-			} else {
-				return td2.cells[0].innerText.localeCompare(td1.cells[0].innerText);
-			}
-
-		});
-		isAsc = !isAsc;
-		let upDownSymbol = sortByNameATag.getElementsByTagName('span')[0];
-		if (upDownSymbol.innerText === '↑') {
-			upDownSymbol.innerText = '↓';
-		} else {
-			upDownSymbol.innerText = '↑';
-		}
-		let oFragment = document.createDocumentFragment(); //创建文档碎片
-		for (let j = 0; j < trArray.length; j++) {
-			oFragment.appendChild(trArray[j]);
-		}
-		oTable.appendChild(oFragment);
-	};
-	let sortByDateATag = document.getElementById('sortByDate');
-	sortByDateATag.onclick = function () {
-		mon = function (m) {return ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][m]}
-		trArray.sort(function (td1, td2) {
-			let datestr1 = td1.cells[1].innerText;
-			let day1 = parseInt(datestr1.split('-')[0]);
-			let month1 = mon(datestr1.split('-')[1]);
-			let year1 = parseInt(datestr1.split('-')[2]);
-			let hour1 = parseInt(datestr1.split(' ')[1].split(':')[0]);
-			let minute1 = parseInt(datestr1.split(' ')[1].split(':')[1]);
-			let date1 = new Date(year1, month1, day1, hour1, minute1, 0, 0);
-
-			let datestr2 = td2.cells[1].innerText;
-			let day2 = parseInt(datestr2.split('-')[0]);
-			let month2 = mon(datestr2.split('-')[1]);
-			let year2 = parseInt(datestr2.split('-')[2]);
-			let hour2 = parseInt(datestr2.split(' ')[1].split(':')[0]);
-			let minute2 = parseInt(datestr2.split(' ')[1].split(':')[1]);
-			let date2 = new Date(year2, month2, day2, hour2, minute2, 0, 0);
-
-			if (isAsc) {
-				return date1.getTime() - date2.getTime();
-			} else {
-				return date2.getTime() - date1.getTime();
-			}
-		});
-		isAsc = !isAsc;
-		let upDownSymbol = sortByDateATag.getElementsByTagName('span')[0];
-		if (upDownSymbol.innerText === '↑') {
-			upDownSymbol.innerText = '↓';
-		} else {
-			upDownSymbol.innerText = '↑';
-		}
-		let oFragment = document.createDocumentFragment(); //创建文档碎片
-		for (let j = 0; j < trArray.length; j++) {
-			oFragment.appendChild(trArray[j]);
-		}
-		oTable.appendChild(oFragment);
-	};
-	let sortBySizeATag = document.getElementById('sortBySize');
-	sortBySizeATag.onclick = function () {
-		trArray.sort(function (td1, td2) {
-			let td1InnerText = td1.cells[2].innerText;
-			let td2InnerText = td2.cells[2].innerText;
-			if (td1InnerText === '-') {
-				td1InnerText = -1;
-			}
-			if (td2InnerText === '-') {
-				td2InnerText = -1;
-			}
-			if (td1InnerText.toString().includes('M')) {
-				td1InnerText = parseInt(td1InnerText.substring(0, td1InnerText.indexOf('M'))) * 1024 * 1024;
-			}
-			if (td1InnerText.toString().includes('K')) {
-				td1InnerText = parseInt(td1InnerText.substring(0, td1InnerText.indexOf('K'))) * 1024;
-			}
-			if (td2InnerText.toString().includes('M')) {
-				td2InnerText = parseInt(td2InnerText.substring(0, td2InnerText.indexOf('M'))) * 1024 * 1024;
-			}
-			if (td2InnerText.toString().includes('K')) {
-				td2InnerText = parseInt(td2InnerText.substring(0, td2InnerText.indexOf('K'))) * 1024;
-			}
-			if (isAsc) {
-				return parseInt(td1InnerText) - parseInt(td2InnerText);
-			} else {
-				return parseInt(td2InnerText) - parseInt(td1InnerText);
-			}
-
-		});
-		isAsc = !isAsc;
-		let upDownSymbol = sortBySizeATag.getElementsByTagName('span')[0];
-		if (upDownSymbol.innerText === '↑') {
-			upDownSymbol.innerText = '↓';
-		} else {
-			upDownSymbol.innerText = '↑';
-		}
-		for (let j = 0; j < trArray.length; j++) {
-			oTbody.appendChild(trArray[j]);
-		}
-	};
+	rows = document.getElementsByClassName('table-hover')[0].rows
 }()
 </script>
 
@@ -372,5 +262,13 @@ table.table-hover > tbody > tr:hover > th {
 .octicon-book {
 	padding-left: 20px;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3,5 L7,5 L7,6 L3,6 L3,5 L3,5 Z M3,8 L7,8 L7,7 L3,7 L3,8 L3,8 Z M3,10 L7,10 L7,9 L3,9 L3,10 L3,10 Z M14,5 L10,5 L10,6 L14,6 L14,5 L14,5 Z M14,7 L10,7 L10,8 L14,8 L14,7 L14,7 Z M14,9 L10,9 L10,10 L14,10 L14,9 L14,9 Z M16,3 L16,12 C16,12.55 15.55,13 15,13 L9.5,13 L8.5,14 L7.5,13 L2,13 C1.45,13 1,12.55 1,12 L1,3 C1,2.45 1.45,2 2,2 L7.5,2 L8.5,3 L9.5,2 L15,2 C15.55,2 16,2.45 16,3 L16,3 Z M8,3.5 L7.5,3 L2,3 L2,12 L8,12 L8,3.5 L8,3.5 Z M15,3 L9.5,3 L9,3.5 L9,12 L15,12 L15,3 L15,3 Z' /%3E%3C/svg%3E");
+}
+.arrow-down {
+	font-weight: bold;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='7 7 7 3 3 3 3 7 0 7 5 13 10 7'%3E%3C/polygon%3E%3C/svg%3E");
+}
+.arrow-up {
+	font-weight: bold;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='5 3 0 9 3 9 3 13 7 13 7 9 10 9'%3E%3C/polygon%3E%3C/svg%3E");
 }
 </style>
