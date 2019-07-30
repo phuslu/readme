@@ -1,4 +1,4 @@
-<!-- autoindex.html 19.05, see https://phuslu.github.io -->
+<!-- autoindex.html 19.07, see https://phuslu.github.io -->
 <script>
 !function(){
 	var website_title = ''
@@ -67,9 +67,9 @@
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('id', 'by-name').attr('class', 'octicon arrow-down').text('Name');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('id', 'by-date').attr('class', 'octicon arrow-down').text('Date');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(3)').attr('id', 'by-size').attr('class', 'octicon arrow-down').text('Size');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(0)').attr('id', 'by-name').attr('class', 'octicon arrow-up').text('Name');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('id', 'by-date').attr('class', 'octicon arrow-up').text('Date');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('id', 'by-size').attr('class', 'octicon arrow-up').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
@@ -157,12 +157,29 @@
 	}
 }()
 
-function sortby(method) {
-	rows = document.getElementsByClassName('table-hover')[0].rows
-	if (method === 1) {
-	} else if (method === 2) {
-	} else if (method === 3) {
+function sortby(index) {
+	key = function (e) {
+		a = e.getElementsByTagName('td')[index].innerText
+		if (index === 0) {
+			return a
+		} else if (index === 1) {
+			return new Date(a).getTime()
+		} else if (index === 2) {
+			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
+			return parseInt(a || 0) * m[a[a.search(/[KMG]B$/)]]
+		}
 	}
+	rows = document.getElementsByClassName('table-hover')[0].rows
+	link = rows[0].getElementsByTagName('a')[index]
+	value = link.className == 'octicon arrow-down' ? 1 : -1;
+	[].slice.call(rows).slice(2).sort(function (a, b) {
+		return key(a) < key(b) ? -value : value
+	}).map(function (e, i) {
+		return e.innerHTML
+	}).forEach(function (e, i) {
+		rows[2+i].innerHTML = e
+	})
+	link.className = 'octicon arrow-' + (value == 1 ? 'up' : 'down')
 }
 </script>
 
@@ -239,14 +256,6 @@ table.table-hover > tbody > tr:hover > th {
 	background-repeat: no-repeat;
 	padding-left: 16px;
 }
-
-.sortBy {
-	color: #5f5f5f;
-	text-decoration: none;
-	font-weight: bold;
-	font-size: 16px;
-}
-
 .file {
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='16' viewBox='0 0 12 16'%3E%3Cpath d='M6 5L2 5 2 4 6 4 6 5 6 5ZM2 8L9 8 9 7 2 7 2 8 2 8ZM2 10L9 10 9 9 2 9 2 10 2 10ZM2 12L9 12 9 11 2 11 2 12 2 12ZM12 4.5L12 14C12 14.6 11.6 15 11 15L1 15C0.5 15 0 14.6 0 14L0 2C0 1.5 0.5 1 1 1L8.5 1 12 4.5 12 4.5ZM11 5L8 2 1 2 1 14 11 14 11 5 11 5Z' fill='%237D94AE'/%3E%3C/svg%3E");
 }
@@ -271,10 +280,12 @@ table.table-hover > tbody > tr:hover > th {
 }
 .arrow-down {
 	font-weight: bold;
+	text-decoration: none !important;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='7 7 7 3 3 3 3 7 0 7 5 13 10 7'%3E%3C/polygon%3E%3C/svg%3E");
 }
 .arrow-up {
 	font-weight: bold;
+	text-decoration: none !important;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='5 3 0 9 3 9 3 13 7 13 7 9 10 9'%3E%3C/polygon%3E%3C/svg%3E");
 }
 </style>
