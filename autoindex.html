@@ -67,9 +67,9 @@
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Name');
-	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Date');
-	thead.add('td').add('a').attr('href', '').attr('class', 'octicon arrow-down').text('Size');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('id', 'by-name').attr('class', 'octicon arrow-down').text('Name');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('id', 'by-date').attr('class', 'octicon arrow-down').text('Date');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(3)').attr('id', 'by-size').attr('class', 'octicon arrow-down').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
@@ -155,9 +155,15 @@
 		div.add('script').attr('src', 'https://cdn.jsdelivr.net/npm/marked')
 		div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
 	}
-
-	rows = document.getElementsByClassName('table-hover')[0].rows
 }()
+
+function sortby(method) {
+	rows = document.getElementsByClassName('table-hover')[0].rows
+	if (method === 1) {
+	} else if (method === 2) {
+	} else if (method === 3) {
+	}
+}
 </script>
 
 <style>
