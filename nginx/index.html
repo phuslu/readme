@@ -1,16 +1,16 @@
 <meta charset="UTF-8"><title>Index of /nginx</title><hr><pre>
-<a href="api.phus.lu.conf">api.phus.lu.conf</a> 16-Jun-2019 20:25 2KB
-<a href="cache.phus.lu.conf">cache.phus.lu.conf</a> 16-Jun-2019 20:25 2KB
-<a href="git.phus.lu.conf">git.phus.lu.conf</a> 16-Jun-2019 20:25 493
-<a href="golab.ml.conf">golab.ml.conf</a> 16-Jun-2019 20:25 198
-<a href="ip.phus.lu.conf">ip.phus.lu.conf</a> 16-Jun-2019 20:25 837
-<a href="notepad.nz.conf">notepad.nz.conf</a> 16-Jun-2019 20:25 820
-<a href="phus.lu.conf">phus.lu.conf</a> 16-Jun-2019 20:25 3KB
-<a href="promvps.ml.conf">promvps.ml.conf</a> 16-Jun-2019 20:25 303
-<a href="scp.phus.lu.conf">scp.phus.lu.conf</a> 16-Jun-2019 20:25 636
-<a href="zzz.lab.phus.lu.conf">zzz.lab.phus.lu.conf</a> 16-Jun-2019 20:25 879
+<a href="api.phus.lu.conf">api.phus.lu.conf</a> 05-May-2019 11:00 2KB
+<a href="cache.phus.lu.conf">cache.phus.lu.conf</a> 05-May-2019 11:00 2KB
+<a href="git.phus.lu.conf">git.phus.lu.conf</a> 04-Apr-2019 01:41 493
+<a href="golab.ml.conf">golab.ml.conf</a> 26-Jun-2019 13:14 198
+<a href="ip.phus.lu.conf">ip.phus.lu.conf</a> 05-May-2019 13:12 837
+<a href="notepad.nz.conf">notepad.nz.conf</a> 26-Jun-2019 13:14 820
+<a href="phus.lu.conf">phus.lu.conf</a> 26-Jun-2019 13:18 3KB
+<a href="promvps.ml.conf">promvps.ml.conf</a> 26-Jun-2019 13:14 303
+<a href="scp.phus.lu.conf">scp.phus.lu.conf</a> 05-May-2019 11:00 636
+<a href="zzz.lab.phus.lu.conf">zzz.lab.phus.lu.conf</a> 05-May-2019 20:50 879
 </pre><hr>
-<!-- autoindex.html 19.05, see https://phuslu.github.io -->
+<!-- autoindex.html 19.07, see https://phuslu.github.io -->
 <script>
 !function(){
 	var website_title = ''
@@ -78,6 +78,10 @@
 	div = dom.get('div').attr('class', 'container')
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
+	thead = tbody.add('tr')
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(0)').attr('class', 'octicon arrow-up').text('Name');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('class', 'octicon arrow-up').text('Date');
+	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('class', 'octicon arrow-up').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
@@ -120,7 +124,6 @@
 	}
 
 	var readme = ''
-
 	insert('../', '', '-')
 	for (var i in bodylines) {
 		if (m = /\s*<a href="(.+?)">(.+?)<\/a>\s+(\S+)\s+(\S+)\s+(\S+)\s*/.exec(bodylines[i])) {
@@ -136,11 +139,10 @@
 
 	document.body.appendChild(div.element)
 
-	if (show_readme_md && readme != '') {
-		tbody = div.add('table').add('tbody')
+	if (show_readme_md && readme !== '') {
+		tbody = div.add('table').add('tbody');
 		tbody.add('tr').add('th').attr('class', 'octicon octicon-book').text(readme)
 		tbody.add('tr').add('td').add('div').attr('id', 'readme').attr('class', 'markdown-body')
-
 		var xhr = new XMLHttpRequest()
 		xhr.open('GET', location.pathname.replace(/[^/]+$/, '')+readme, true)
 		xhr.onload = function() {
@@ -166,9 +168,35 @@
 		div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
 	}
 }()
+
+function sortby(index) {
+	key = function (e) {
+		a = e.getElementsByTagName('td')[index].innerText
+		if (index === 0) {
+			return a
+		} else if (index === 1) {
+			return new Date(a).getTime()
+		} else if (index === 2) {
+			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
+			return parseInt(a || 0) * (m[a[a.search(/[KMG]B$/)]] || 1)
+		}
+	}
+	rows = document.getElementsByClassName('table-hover')[0].rows
+	link = rows[0].getElementsByTagName('a')[index]
+	value = link.className == 'octicon arrow-down' ? 1 : -1;
+	[].slice.call(rows).slice(2).sort(function (a, b) {
+		return key(a) < key(b) ? -value : value
+	}).map(function (e, i) {
+		return e.innerHTML
+	}).forEach(function (e, i) {
+		rows[2+i].innerHTML = e
+	})
+	link.className = 'octicon arrow-' + (value == 1 ? 'up' : 'down')
+}
 </script>
 
-<style> body {
+<style>
+body {
 	margin: 0;
 	font-family: "ubuntu", "Tahoma", "Microsoft YaHei", Arial, Serif;
 }
@@ -262,5 +290,14 @@ table.table-hover > tbody > tr:hover > th {
 	padding-left: 20px;
 	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 16 16'%3E%3Cpath d='M3,5 L7,5 L7,6 L3,6 L3,5 L3,5 Z M3,8 L7,8 L7,7 L3,7 L3,8 L3,8 Z M3,10 L7,10 L7,9 L3,9 L3,10 L3,10 Z M14,5 L10,5 L10,6 L14,6 L14,5 L14,5 Z M14,7 L10,7 L10,8 L14,8 L14,7 L14,7 Z M14,9 L10,9 L10,10 L14,10 L14,9 L14,9 Z M16,3 L16,12 C16,12.55 15.55,13 15,13 L9.5,13 L8.5,14 L7.5,13 L2,13 C1.45,13 1,12.55 1,12 L1,3 C1,2.45 1.45,2 2,2 L7.5,2 L8.5,3 L9.5,2 L15,2 C15.55,2 16,2.45 16,3 L16,3 Z M8,3.5 L7.5,3 L2,3 L2,12 L8,12 L8,3.5 L8,3.5 Z M15,3 L9.5,3 L9,3.5 L9,12 L15,12 L15,3 L15,3 Z' /%3E%3C/svg%3E");
 }
+.arrow-down {
+	font-weight: bold;
+	text-decoration: none !important;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='7 7 7 3 3 3 3 7 0 7 5 13 10 7'%3E%3C/polygon%3E%3C/svg%3E");
+}
+.arrow-up {
+	font-weight: bold;
+	text-decoration: none !important;
+	background-image: url("data:image/svg+xml;charset=utf8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='10' height='16' viewBox='0 0 10 16'%3E%3Cpolygon id='Shape' points='5 3 0 9 3 9 3 13 7 13 7 9 10 9'%3E%3C/polygon%3E%3C/svg%3E");
+}
 </style>
-
