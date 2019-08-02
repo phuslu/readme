@@ -67,9 +67,9 @@
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(0)').attr('class', 'octicon arrow-up').text('Name');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('class', 'octicon arrow-up').text('Date');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('class', 'octicon arrow-up').text('Size');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(0)').attr('class', 'octicon arrow-up').text('Name');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(1)').attr('class', 'octicon arrow-up').text('Date');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(2)').attr('class', 'octicon arrow-up').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
