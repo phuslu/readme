@@ -1,19 +1,19 @@
 <meta charset="UTF-8"><title>Index of /</title><hr><pre>
-<a href="history/">history/</a> 30-Jul-2019 11:46 4KB
-<a href="legend/">legend/</a> 30-Jul-2019 11:46 4KB
-<a href="nginx/">nginx/</a> 30-Jul-2019 11:46 4KB
-<a href="README.md">README.md</a> 04-Apr-2019 01:41 244
-<a href="autoindex.html">autoindex.html</a> 31-Jul-2019 22:40 10KB
-<a href="autoindex.php">autoindex.php</a> 30-Jul-2019 11:46 1KB
-<a href="bashrc">bashrc</a> 30-Jul-2019 11:46 2KB
-<a href="cmdhere.cmd">cmdhere.cmd</a> 30-Jul-2019 11:46 2KB
-<a href="favicon.ico">favicon.ico</a> 04-Apr-2019 01:41 4KB
-<a href="markdown.html">markdown.html</a> 26-Jun-2019 13:14 3KB
-<a href="search.html">search.html</a> 26-Jun-2019 13:14 179
-<a href="sysctl.conf">sysctl.conf</a> 30-Jul-2019 11:46 3KB
-<a href="tz.php">tz.php</a> 26-Jun-2019 13:14 28KB
-<a href="vimrc">vimrc</a> 26-Jun-2019 13:14 3KB
-<a href="wallpaper.html">wallpaper.html</a> 26-Jun-2019 13:14 3KB
+<a href="history/">history/</a> 01-Aug-2019 21:54 4KB
+<a href="legend/">legend/</a> 01-Aug-2019 21:54 4KB
+<a href="nginx/">nginx/</a> 01-Aug-2019 21:54 4KB
+<a href="README.md">README.md</a> 18-Jun-2019 01:57 244
+<a href="autoindex.html">autoindex.html</a> 03-Aug-2019 00:04 10KB
+<a href="autoindex.php">autoindex.php</a> 12-Jul-2019 12:53 1KB
+<a href="bashrc">bashrc</a> 01-Jul-2019 11:22 2KB
+<a href="cmdhere.cmd">cmdhere.cmd</a> 03-Jul-2019 23:01 2KB
+<a href="favicon.ico">favicon.ico</a> 18-Jun-2019 01:57 4KB
+<a href="markdown.html">markdown.html</a> 15-Jun-2019 23:07 3KB
+<a href="search.html">search.html</a> 17-Jun-2019 15:48 179
+<a href="sysctl.conf">sysctl.conf</a> 02-Jul-2019 13:20 3KB
+<a href="tz.php">tz.php</a> 17-Jun-2019 15:47 28KB
+<a href="vimrc">vimrc</a> 16-Jun-2019 20:29 3KB
+<a href="wallpaper.html">wallpaper.html</a> 15-Jun-2019 23:07 3KB
 </pre><hr>
 <!-- autoindex.html 19.07, see https://phuslu.github.io -->
 <script>
@@ -84,9 +84,9 @@
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(0)').attr('class', 'octicon arrow-up').text('Name');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('class', 'octicon arrow-up').text('Date');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('class', 'octicon arrow-up').text('Size');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(0)').attr('class', 'octicon arrow-up').text('Name');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(1)').attr('class', 'octicon arrow-up').text('Date');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(2)').attr('class', 'octicon arrow-up').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {

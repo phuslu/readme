@@ -1,25 +1,25 @@
 <meta charset="UTF-8"><title>Index of /history</title><hr><pre>
-<a href="Dockerfile">Dockerfile</a> 05-May-2019 11:00 2KB
-<a href="IR_Black.terminal">IR_Black.terminal</a> 05-May-2019 11:00 14KB
-<a href="adev.py">adev.py</a> 05-May-2019 11:00 2KB
-<a href="centos7.sh">centos7.sh</a> 26-Jun-2019 13:14 1KB
-<a href="demoserver.service">demoserver.service</a> 05-May-2019 11:00 327
-<a href="getroot">getroot</a> 26-Jun-2019 13:18 236KB
-<a href="getroot.c">getroot.c</a> 05-May-2019 11:00 3KB
-<a href="getstatusoutput.py">getstatusoutput.py</a> 05-May-2019 11:00 3KB
-<a href="guestbook.php">guestbook.php</a> 05-May-2019 11:00 9KB
-<a href="httpsserver.py">httpsserver.py</a> 05-May-2019 11:00 743
-<a href="notepad.php">notepad.php</a> 05-May-2019 11:00 2KB
-<a href="octicons-css.py">octicons-css.py</a> 05-May-2019 11:00 1KB
-<a href="octicons.css">octicons.css</a> 05-May-2019 11:00 112KB
-<a href="pychrome_demo.py">pychrome_demo.py</a> 05-May-2019 11:00 6KB
-<a href="pychrome_for_tianyancha.py">pychrome_for_tianyancha.py</a> 05-May-2019 11:00 6KB
-<a href="random_words.py">random_words.py</a> 05-May-2019 11:00 686
-<a href="rdpproxy.go">rdpproxy.go</a> 05-May-2019 11:00 1KB
-<a href="sshd_pam_exec.sh">sshd_pam_exec.sh</a> 05-May-2019 11:00 709
-<a href="stunnel.conf">stunnel.conf</a> 05-May-2019 11:00 467
-<a href="sublime-settings.txt">sublime-settings.txt</a> 05-May-2019 11:00 391
-<a href="upload.php">upload.php</a> 05-May-2019 11:00 3KB
+<a href="Dockerfile">Dockerfile</a> 16-Jun-2019 20:25 2KB
+<a href="IR_Black.terminal">IR_Black.terminal</a> 16-Jun-2019 20:25 14KB
+<a href="adev.py">adev.py</a> 16-Jun-2019 20:25 2KB
+<a href="centos7.sh">centos7.sh</a> 20-Jun-2019 22:24 1KB
+<a href="demoserver.service">demoserver.service</a> 16-Jun-2019 20:25 327
+<a href="getroot">getroot</a> 27-Jun-2019 01:24 236KB
+<a href="getroot.c">getroot.c</a> 16-Jun-2019 20:25 3KB
+<a href="getstatusoutput.py">getstatusoutput.py</a> 16-Jun-2019 20:25 3KB
+<a href="guestbook.php">guestbook.php</a> 16-Jun-2019 20:25 9KB
+<a href="httpsserver.py">httpsserver.py</a> 16-Jun-2019 20:25 743
+<a href="notepad.php">notepad.php</a> 16-Jun-2019 20:25 2KB
+<a href="octicons-css.py">octicons-css.py</a> 16-Jun-2019 20:25 1KB
+<a href="octicons.css">octicons.css</a> 16-Jun-2019 20:25 112KB
+<a href="pychrome_demo.py">pychrome_demo.py</a> 16-Jun-2019 20:25 6KB
+<a href="pychrome_for_tianyancha.py">pychrome_for_tianyancha.py</a> 16-Jun-2019 20:25 6KB
+<a href="random_words.py">random_words.py</a> 16-Jun-2019 20:25 686
+<a href="rdpproxy.go">rdpproxy.go</a> 16-Jun-2019 20:25 1KB
+<a href="sshd_pam_exec.sh">sshd_pam_exec.sh</a> 16-Jun-2019 20:25 709
+<a href="stunnel.conf">stunnel.conf</a> 16-Jun-2019 20:25 467
+<a href="sublime-settings.txt">sublime-settings.txt</a> 16-Jun-2019 20:25 391
+<a href="upload.php">upload.php</a> 16-Jun-2019 20:25 3KB
 </pre><hr>
 <!-- autoindex.html 19.07, see https://phuslu.github.io -->
 <script>
@@ -90,9 +90,9 @@
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(0)').attr('class', 'octicon arrow-up').text('Name');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(1)').attr('class', 'octicon arrow-up').text('Date');
-	thead.add('td').add('a').attr('href', '#').attr('onclick', 'sortby(2)').attr('class', 'octicon arrow-up').text('Size');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(0)').attr('class', 'octicon arrow-up').text('Name');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(1)').attr('class', 'octicon arrow-up').text('Date');
+	thead.add('td').add('a').attr('href', 'javascript:sortby(2)').attr('class', 'octicon arrow-up').text('Size');
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
