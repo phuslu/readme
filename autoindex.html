@@ -168,7 +168,7 @@ function sortby(index) {
 			size = new Date(text).getTime()
 		} else if (index === 2) {
 			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
-			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B$/)]] || 1)
+			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B?$/)]] || 1)
 		}
 		return {type: type, size: size}
 	}
