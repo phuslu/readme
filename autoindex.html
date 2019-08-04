@@ -159,7 +159,7 @@
 
 function sortby(index) {
 	key = function (e) {
-		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 1 : 0
+		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 0 : 1
 		text = e.getElementsByTagName('td')[index].innerText
 		if (index === 0) {
 			size = text
@@ -177,8 +177,9 @@ function sortby(index) {
 	[].slice.call(rows).slice(2).sort(function (a, b) {
 		ka = key(a)
 		kb = key(b)
-		if (ka.type != kb.type)
-			return ka.type < kb.type ? -value : value
+		t = ka.type - kb.type
+		if (t != 0)
+			return t
 		return ka.size < kb.size ? -value : value
 	}).map(function (e, i) {
 		return e.innerHTML
