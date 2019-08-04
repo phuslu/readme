@@ -159,21 +159,27 @@
 
 function sortby(index) {
 	key = function (e) {
-		a = e.getElementsByTagName('td')[index].innerText
+		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 1 : 0
+		text = e.getElementsByTagName('td')[index].innerText
 		if (index === 0) {
-			return a
+			size = text
 		} else if (index === 1) {
-			return new Date(a).getTime()
+			size = new Date(text).getTime()
 		} else if (index === 2) {
 			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
-			return parseInt(a || 0) * (m[a[a.search(/[KMG]B$/)]] || 1)
+			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B$/)]] || 1)
 		}
+		return {type: type, size: size}
 	}
 	rows = document.getElementsByClassName('table-hover')[0].rows
 	link = rows[0].getElementsByTagName('a')[index]
 	value = link.className == 'octicon arrow-down' ? 1 : -1;
 	[].slice.call(rows).slice(2).sort(function (a, b) {
-		return key(a) < key(b) ? -value : value
+		ka = key(a)
+		kb = key(b)
+		if (ka.type != kb.type)
+			return ka.type < kb.type ? -value : value
+		return ka.size < kb.size ? -value : value
 	}).map(function (e, i) {
 		return e.innerHTML
 	}).forEach(function (e, i) {
