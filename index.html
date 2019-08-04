@@ -1,9 +1,9 @@
 <meta charset="UTF-8"><title>Index of /</title><hr><pre>
-<a href="history/">history/</a> 01-Aug-2019 21:54 4KB
-<a href="legend/">legend/</a> 01-Aug-2019 21:54 4KB
-<a href="nginx/">nginx/</a> 01-Aug-2019 21:54 4KB
+<a href="history/">history/</a> 04-Aug-2019 19:02 4KB
+<a href="legend/">legend/</a> 04-Aug-2019 19:02 4KB
+<a href="nginx/">nginx/</a> 04-Aug-2019 19:02 4KB
 <a href="README.md">README.md</a> 18-Jun-2019 01:57 244
-<a href="autoindex.html">autoindex.html</a> 03-Aug-2019 00:04 10KB
+<a href="autoindex.html">autoindex.html</a> 04-Aug-2019 19:02 11KB
 <a href="autoindex.php">autoindex.php</a> 12-Jul-2019 12:53 1KB
 <a href="bashrc">bashrc</a> 01-Jul-2019 11:22 2KB
 <a href="cmdhere.cmd">cmdhere.cmd</a> 03-Jul-2019 23:01 2KB
@@ -176,21 +176,28 @@
 
 function sortby(index) {
 	key = function (e) {
-		a = e.getElementsByTagName('td')[index].innerText
+		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 0 : 1
+		text = e.getElementsByTagName('td')[index].innerText
 		if (index === 0) {
-			return a
+			size = text
 		} else if (index === 1) {
-			return new Date(a).getTime()
+			size = new Date(text).getTime()
 		} else if (index === 2) {
 			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
-			return parseInt(a || 0) * (m[a[a.search(/[KMG]B$/)]] || 1)
+			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B$/)]] || 1)
 		}
+		return {type: type, size: size}
 	}
 	rows = document.getElementsByClassName('table-hover')[0].rows
 	link = rows[0].getElementsByTagName('a')[index]
 	value = link.className == 'octicon arrow-down' ? 1 : -1;
 	[].slice.call(rows).slice(2).sort(function (a, b) {
-		return key(a) < key(b) ? -value : value
+		ka = key(a)
+		kb = key(b)
+		t = ka.type - kb.type
+		if (t != 0)
+			return t
+		return ka.size < kb.size ? -value : value
 	}).map(function (e, i) {
 		return e.innerHTML
 	}).forEach(function (e, i) {
