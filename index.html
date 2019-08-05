@@ -1,21 +1,21 @@
 <meta charset="UTF-8"><title>Index of /</title><hr><pre>
-<a href="history/">history/</a> 04-Aug-2019 19:02 4KB
-<a href="legend/">legend/</a> 04-Aug-2019 19:02 4KB
-<a href="nginx/">nginx/</a> 04-Aug-2019 19:02 4KB
-<a href="README.md">README.md</a> 18-Jun-2019 01:57 244
-<a href="autoindex.html">autoindex.html</a> 04-Aug-2019 19:02 11KB
-<a href="autoindex.php">autoindex.php</a> 12-Jul-2019 12:53 1KB
-<a href="bashrc">bashrc</a> 01-Jul-2019 11:22 2KB
-<a href="cmdhere.cmd">cmdhere.cmd</a> 03-Jul-2019 23:01 2KB
-<a href="favicon.ico">favicon.ico</a> 18-Jun-2019 01:57 4KB
-<a href="markdown.html">markdown.html</a> 15-Jun-2019 23:07 3KB
-<a href="search.html">search.html</a> 17-Jun-2019 15:48 179
-<a href="sysctl.conf">sysctl.conf</a> 02-Jul-2019 13:20 3KB
-<a href="tz.php">tz.php</a> 17-Jun-2019 15:47 28KB
-<a href="vimrc">vimrc</a> 16-Jun-2019 20:29 3KB
-<a href="wallpaper.html">wallpaper.html</a> 15-Jun-2019 23:07 3KB
+<a href="history/">history/</a> 04-Aug-2019 23:52 4KB
+<a href="legend/">legend/</a> 04-Aug-2019 23:52 4KB
+<a href="nginx/">nginx/</a> 04-Aug-2019 23:52 4KB
+<a href="README.md">README.md</a> 04-Apr-2019 01:41 244
+<a href="autoindex.html">autoindex.html</a> 05-Aug-2019 09:58 10KB
+<a href="autoindex.php">autoindex.php</a> 30-Jul-2019 11:46 1KB
+<a href="bashrc">bashrc</a> 30-Jul-2019 11:46 2KB
+<a href="cmdhere.cmd">cmdhere.cmd</a> 30-Jul-2019 11:46 2KB
+<a href="favicon.ico">favicon.ico</a> 04-Apr-2019 01:41 4KB
+<a href="markdown.html">markdown.html</a> 26-Jun-2019 13:14 3KB
+<a href="search.html">search.html</a> 26-Jun-2019 13:14 179
+<a href="sysctl.conf">sysctl.conf</a> 30-Jul-2019 11:46 3KB
+<a href="tz.php">tz.php</a> 26-Jun-2019 13:14 28KB
+<a href="vimrc">vimrc</a> 26-Jun-2019 13:14 3KB
+<a href="wallpaper.html">wallpaper.html</a> 26-Jun-2019 13:14 3KB
 </pre><hr>
-<!-- autoindex.html 19.07, see https://phuslu.github.io -->
+<!-- autoindex.html 19.08, see https://phuslu.github.io -->
 <script>
 !function(){
 	var website_title = ''
@@ -83,10 +83,11 @@
 	div = dom.get('div').attr('class', 'container')
 	div.add('table').add('tbody').add('tr').add('th').html(titlehtml)
 	tbody = div.add('table').attr('class', 'table-hover').add('tbody')
+
+	names = ['Name', 'Date', 'Size']
 	thead = tbody.add('tr')
-	thead.add('td').add('a').attr('href', 'javascript:sortby(0)').attr('class', 'octicon arrow-up').text('Name');
-	thead.add('td').add('a').attr('href', 'javascript:sortby(1)').attr('class', 'octicon arrow-up').text('Date');
-	thead.add('td').add('a').attr('href', 'javascript:sortby(2)').attr('class', 'octicon arrow-up').text('Size');
+	for (i = 0; i < names.length; i++)
+		thead.add('td').add('a').attr('href', 'javascript:sortby('+i+')').attr('class', 'octicon arrow-up').text(names[i]);
 
 	var insert = function(filename, datetime, size) {
 		if (/\/$/.test(filename)) {
@@ -175,35 +176,31 @@
 }()
 
 function sortby(index) {
-	key = function (e) {
+	rows = document.getElementsByClassName('table-hover')[0].rows
+	link = rows[0].getElementsByTagName('a')[index]
+	arrow = link.className == 'octicon arrow-down' ? 1 : -1
+	link.className = 'octicon arrow-' + (arrow == 1 ? 'up' : 'down');
+	[].slice.call(rows).slice(2).map(function (e, i) {
 		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 0 : 1
 		text = e.getElementsByTagName('td')[index].innerText
 		if (index === 0) {
-			size = text
+			value = text
 		} else if (index === 1) {
-			size = new Date(text).getTime()
+			value = new Date(text).getTime()
 		} else if (index === 2) {
 			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
-			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B$/)]] || 1)
+			value = parseInt(text || 0) * (m[text[text.search(/[KMG]B?$/)]] || 1)
 		}
-		return {type: type, size: size}
-	}
-	rows = document.getElementsByClassName('table-hover')[0].rows
-	link = rows[0].getElementsByTagName('a')[index]
-	value = link.className == 'octicon arrow-down' ? 1 : -1;
-	[].slice.call(rows).slice(2).sort(function (a, b) {
-		ka = key(a)
-		kb = key(b)
-		t = ka.type - kb.type
-		if (t != 0)
-			return t
-		return ka.size < kb.size ? -value : value
-	}).map(function (e, i) {
-		return e.innerHTML
+		return {type: type, value: value, index: i, html: e.innerHTML}
+	}).sort(function (a, b) {
+		if (a.type != b.type)
+			return a.type - b.type
+		if (a.value != b.value)
+			return a.value < b.value ? -arrow : arrow
+		return a.index < b.index ? -arrow : arrow
 	}).forEach(function (e, i) {
-		rows[2+i].innerHTML = e
+		rows[2+i].innerHTML = e.html
 	})
-	link.className = 'octicon arrow-' + (value == 1 ? 'up' : 'down')
 }
 </script>
 
