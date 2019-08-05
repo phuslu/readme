@@ -1,4 +1,4 @@
-<!-- autoindex.html 19.07, see https://phuslu.github.io -->
+<!-- autoindex.html 19.08, see https://phuslu.github.io -->
 <script>
 !function(){
 	var website_title = ''
@@ -159,34 +159,30 @@
 }()
 
 function sortby(index) {
-	key = function (e) {
+	rows = document.getElementsByClassName('table-hover')[0].rows
+	link = rows[0].getElementsByTagName('a')[index]
+	arrow = link.className == 'octicon arrow-down' ? 1 : -1
+	link.className = 'octicon arrow-' + (arrow == 1 ? 'up' : 'down');
+	[].slice.call(rows).slice(2).map(function (e, i) {
 		type = e.getElementsByTagName('a')[0].className == 'octicon file-directory' ? 0 : 1
 		text = e.getElementsByTagName('td')[index].innerText
 		if (index === 0) {
-			size = text
+			value = text
 		} else if (index === 1) {
-			size = new Date(text).getTime()
+			value = new Date(text).getTime()
 		} else if (index === 2) {
 			m = {'G':1024*1024*1024, 'M':1024*1024, 'K':1024}
-			size = parseInt(text || 0) * (m[text[text.search(/[KMG]B?$/)]] || 1)
+			value = parseInt(text || 0) * (m[text[text.search(/[KMG]B?$/)]] || 1)
 		}
-		return {type: type, size: size}
-	}
-	rows = document.getElementsByClassName('table-hover')[0].rows
-	link = rows[0].getElementsByTagName('a')[index]
-	value = link.className == 'octicon arrow-down' ? 1 : -1
-	link.className = 'octicon arrow-' + (value == 1 ? 'up' : 'down');
-	[].slice.call(rows).slice(2).sort(function (a, b) {
-		ka = key(a)
-		kb = key(b)
-		t = ka.type - kb.type
-		if (t != 0)
-			return t
-		return ka.size < kb.size ? -value : value
-	}).map(function (e, i) {
-		return e.innerHTML
+		return {type: type, value: value, index: i, html: e.innerHTML}
+	}).sort(function (a, b) {
+		if (a.type != b.type)
+			return a.type - b.type
+		if (a.value != b.value)
+			return a.value < b.value ? -arrow : arrow
+		return a.index < b.index ? -arrow : arrow
 	}).forEach(function (e, i) {
-		rows[2+i].innerHTML = e
+		rows[2+i].innerHTML = e.html
 	})
 }
 </script>
