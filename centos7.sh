@@ -1,7 +1,8 @@
 yum install -y epel-release
-yum install -y wget rsync ngrep jq htop
+yum install -y wget rsync ngrep jq htop chrony
 curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf
 sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
+sudo systemctl stop firewalld && sudo systemctl disable firewalld
 echo -e "* soft nofile 1048576\n* hard nofile 1048576" | tee /etc/security/limits.d/99-phuslu.conf
 adduser centos
 echo 'centos    ALL=(ALL)       NOPASSWD:ALL' | tee -a /etc/sudoers
