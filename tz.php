@@ -134,7 +134,7 @@ function get_sockstat()
 		$key = trim($parts[0]);
 		$values = preg_split('/\s+/', trim($parts[1]));
 		$info[$key] = array();
-		for ($i = 0; $i < count($info); $i += 2) {
+		for ($i = 0; $i < count($values); $i += 2) {
 			$info[$key][$values[$i]] = $values[$i+1];
 		}
 	}
@@ -438,29 +438,31 @@ function my_json_encode($a=false)
 
 if (!function_exists('json_encode'))
 {
-	function json_encode($a, $flag)
+	function json_encode($a)
 	{
 		return my_json_encode($a);
 	}
 }
 
-switch ($_GET['method']) {
-	case 'phpinfo':
-		phpinfo();
-		exit;
-	case 'sysinfo':
-		echo json_encode(array(
-			'stat' => get_stat(),
-			'stime' => date('Y-m-d H:i:s'),
-			'uptime' => get_uptime(),
-			'tempinfo' => get_tempinfo(),
-			'meminfo' => get_meminfo(),
-			'loadavg' => get_loadavg(),
-			'sockstat' => get_sockstat(),
-			'diskinfo' => get_diskinfo(),
-			'netdev' => get_netdev(),
-		));
-		exit;
+if (isset($_GET['method'])) {
+	switch ($_GET['method']) {
+		case 'phpinfo':
+			phpinfo();
+			exit;
+		case 'sysinfo':
+			echo json_encode(array(
+				'stat' => get_stat(),
+				'stime' => date('Y-m-d H:i:s'),
+				'uptime' => get_uptime(),
+				'tempinfo' => get_tempinfo(),
+				'meminfo' => get_meminfo(),
+				'loadavg' => get_loadavg(),
+				'sockstat' => get_sockstat(),
+				'diskinfo' => get_diskinfo(),
+				'netdev' => get_netdev(),
+			));
+			exit;
+	}
 }
 
 $time_start = microtime(true);
