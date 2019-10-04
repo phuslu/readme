@@ -445,6 +445,7 @@ if (!function_exists('json_encode'))
 }
 
 if (isset($_GET['method'])) {
+	header("Cache-Control: no-cache, must-revalidate");
 	switch ($_GET['method']) {
 		case 'phpinfo':
 			phpinfo();
