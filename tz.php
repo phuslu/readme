@@ -79,8 +79,7 @@ function human_filesize($bytes) {
 	$units = array('B','K','M','G','T');
 	$size = '';
 
-	while ($bytes > 0 && count($units) > 0)
-	{
+	while ($bytes > 0 && count($units) > 0) {
 		$size = strval($bytes % 1024) . ' ' .array_shift($units) . ' ' . $size;
 		$bytes = intval($bytes / 1024);
 	}
@@ -90,28 +89,20 @@ function human_filesize($bytes) {
 
 function get_remote_addr()
 {
-	if (isset($_SERVER["HTTP_X_REAL_IP"]))
-	{
+	if (isset($_SERVER["HTTP_X_REAL_IP"])) {
 		return $_SERVER["HTTP_X_REAL_IP"];
-	}
-	else if (isset($_SERVER["HTTP_X_FORWARDED_FOR"]))
-	{
+	} else if (isset($_SERVER["HTTP_X_FORWARDED_FOR"])) {
 		return preg_replace('/^.+,\s*/', '', $_SERVER["HTTP_X_FORWARDED_FOR"]);
-	}
-	else
-	{
+	} else {
 		return $_SERVER["REMOTE_ADDR"];
 	}
 }
 
 function get_server_addr()
 {
-	if ($_SERVER["SERVER_ADDR"] != "127.0.0.1")
-	{
+	if ($_SERVER["SERVER_ADDR"] != "127.0.0.1") {
 		return $_SERVER["SERVER_ADDR"];
-	}
-	else
-	{
+	} else {
 		return gethostbyname(php_uname('n'));
 	}
 }
@@ -171,8 +162,7 @@ function get_cpuinfo()
 
 	$zh = (substr($_SERVER['HTTP_ACCEPT_LANGUAGE'], 0, 2) === 'zh');
 
-	if (is_array($model[1]))
-	{
+	if (is_array($model[1])) {
 		$info['num'] = sizeof($processor[1]);
 		$info['model'] = $model[1][0];
 		$info['frequency'] = $mhz[1][0];
@@ -277,10 +267,8 @@ function get_loadavg()
 
 function get_distname()
 {
-	foreach (glob('/etc/*release') as $name)
-	{
-		if ($name == '/etc/centos-release' || $name == '/etc/redhat-release' || $name == '/etc/system-release')
-		{
+	foreach (glob('/etc/*release') as $name) {
+		if ($name == '/etc/centos-release' || $name == '/etc/redhat-release' || $name == '/etc/system-release') {
 			return array_shift(file($name));
 		}
 
@@ -300,30 +288,24 @@ function get_boardinfo()
 {
 	$info = array();
 
-	if (is_file('/sys/class/dmi/id/bios_vendor'))
-	{
+	if (is_file('/sys/class/dmi/id/bios_vendor')) {
 		$info['BIOSVendor'] = array_shift(file('/sys/class/dmi/id/bios_vendor', FILE_IGNORE_NEW_LINES));
 		$info['BIOSVersion'] = array_shift(file('/sys/class/dmi/id/bios_version', FILE_IGNORE_NEW_LINES));
 		$info['BIOSDate'] = array_shift(file('/sys/class/dmi/id/bios_date', FILE_IGNORE_NEW_LINES));
 	}
 
-	if (is_file('/sys/class/dmi/id/board_name'))
-	{
+	if (is_file('/sys/class/dmi/id/board_name')) {
 		$info['boardVendor'] = array_shift(file('/sys/class/dmi/id/board_vendor', FILE_IGNORE_NEW_LINES));
 		$info['boardName'] = array_shift(file('/sys/class/dmi/id/board_name', FILE_IGNORE_NEW_LINES));
 		$info['boardVersion'] = array_shift(file('/sys/class/dmi/id/board_version', FILE_IGNORE_NEW_LINES));
-	}
-	else if (is_file('/sys/class/dmi/id/product_name'))
-	{
+	} else if (is_file('/sys/class/dmi/id/product_name')) {
 		$info['boardVendor'] = array_shift(file('/sys/class/dmi/id/product_name', FILE_IGNORE_NEW_LINES));
 		$info['boardName'] = '';
 		$info['boardVersion'] = '';
 	}
 
-	if (is_dir('/dev/disk/by-id'))
-	{
-		if ($names=array_filter(scandir('/dev/disk/by-id'), function($k) { return $k[0] != '.' && strpos($k, 'DVD-ROM') === false; }))
-		{
+	if (is_dir('/dev/disk/by-id')) {
+		if ($names=array_filter(scandir('/dev/disk/by-id'), function($k) { return $k[0] != '.' && strpos($k, 'DVD-ROM') === false; })) {
 			$parts = explode("_", array_shift($names));
 			$parts = explode("-", array_shift($parts), 2);
 			$info['diskVendor'] = strtoupper($parts[0]);
@@ -353,8 +335,7 @@ function get_netdev()
 	$info = array();
 
 	$strs = @file('/proc/net/dev');
-	for ($i = 2; $i < count($strs); $i++ )
-	{
+	for ($i = 2; $i < count($strs); $i++ ) {
 		$parts = preg_split('/\s+/', trim($strs[$i]));
 		$dev = trim($parts[0], ':');
 		$info[$dev] = array(
@@ -374,8 +355,7 @@ function get_netarp()
 
 	$seen = array();
 	$strs = @file('/proc/net/arp');
-	for ($i = 1; $i < count($strs); $i++ )
-	{
+	for ($i = 1; $i < count($strs); $i++ ) {
 		$parts = preg_split('/\s+/', $strs[$i]);
 		if ('0x2' == $parts[2] && !isset($seen[$parts[3]])) {
 			$seen[$parts[3]] = true;
@@ -398,14 +378,11 @@ function my_json_encode($a=false)
 		return 'false';
 	if ($a === true)
 		return 'true';
-	if (is_scalar($a))
-	{
-		if (is_float($a))
-		{
+	if (is_scalar($a)) {
+		if (is_float($a)) {
 			return floatval(str_replace(',', '.', strval($a)));
 		}
-		if (is_string($a))
-		{
+		if (is_string($a)) {
 			static $jsonReplaces = array(array("\\", "/", "\n", "\t", "\r", "\b", "\f", '"'), array('\\\\', '\\/', '\\n', '\\t', '\\r', '\\b', '\\f', '\"'));
 			return '"' . str_replace($jsonReplaces[0], $jsonReplaces[1], $a) . '"';
 		}
@@ -413,33 +390,26 @@ function my_json_encode($a=false)
 			return $a;
 	}
 	$isList = true;
-	for ($i = 0, reset($a); $i < count($a); $i++, next($a))
-	{
-		if (key($a) !== $i)
-		{
+	for ($i = 0, reset($a); $i < count($a); $i++, next($a)) {
+		if (key($a) !== $i) {
 			$isList = false;
 			break;
 		}
 	}
 	$result = array();
-	if ($isList)
-	{
+	if ($isList) {
 		foreach ($a as $v)
 			$result[] = my_json_encode($v);
 		return '[' . join(',', $result) . ']';
-	}
-	else
-	{
+	} else {
 		foreach ($a as $k => $v)
 			$result[] = my_json_encode($k).':'.my_json_encode($v);
 		return '{' . join(',', $result) . '}';
 	}
 }
 
-if (!function_exists('json_encode'))
-{
-	function json_encode($a)
-	{
+if (!function_exists('json_encode')) {
+	function json_encode($a) {
 		return my_json_encode($a);
 	}
 }
