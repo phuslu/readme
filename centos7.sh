@@ -2,8 +2,7 @@ yum install -y epel-release
 yum install -y wget vim rsync ngrep jq htop chrony tmux lrzsz bash-completion
 curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf
 sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
-sudo systemctl stop firewalld
-sudo systemctl disable firewalld
+sudo systemctl disable firewalld || true
 echo -e "* soft nofile 1048576\n* hard nofile 1048576" | tee /etc/security/limits.d/99-phuslu.conf
 curl myip.ipip.net | grep 中国 && (
 	cat <<EOF | sudo tee /etc/profile.d/pip.sh
