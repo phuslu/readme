@@ -9,7 +9,8 @@ if (file_exists(dirname(__FILE__) . '/guestbook-config.php')) {
 }
 
 # sudo apt install libphp-phpmailer
-require 'libphp-phpmailer/PHPMailerAutoload.php';
+# sudo yum install php-PHPMailer
+# require 'libphp-phpmailer/PHPMailerAutoload.php';
 
 if (isset($_REQUEST['username']) && isset($_REQUEST['email']) && isset($_REQUEST['message'])) {
   $username = $_REQUEST['username'];
