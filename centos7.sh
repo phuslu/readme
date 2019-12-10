@@ -4,10 +4,11 @@ curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf
 sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 sudo systemctl disable firewalld || true
 echo -e "* soft nofile 1048576\n* hard nofile 1048576" | tee /etc/security/limits.d/99-phuslu.conf
-curl myip.ipip.net | grep 中国 && (
+curl https://myip.ipip.net | grep 中国 && (
 	cat <<EOF | sudo tee /etc/profile.d/pip.sh
 export PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
 export PIPENV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple/
+export PIPENV_VENV_IN_PROJECT=1
 EOF
 	sudo chmod +x /etc/profile.d/pip.sh
 )
