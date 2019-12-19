@@ -21,4 +21,6 @@ test -d /home/centos || (
 	chmod g-w /home/centos/.ssh
 	chmod 0600 /home/centos/.ssh/*
 )
-su centos -c 'cd; curl https://phuslu.github.io/bashrc | grep ^# | tail -n +2 | cut -b3- | grep ^curl | bash -xe'
+test -f /home/centos/.z.sh || (
+	su centos -c 'cd; curl https://phuslu.github.io/bashrc | grep ^# | tail -n +2 | cut -b3- | grep ^curl | bash -xe'
+)
