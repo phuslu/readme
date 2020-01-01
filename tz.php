@@ -277,6 +277,11 @@ function get_distname()
 	if (isset($release_info['PRETTY_NAME']))
 		return $release_info['PRETTY_NAME'];
 
+	if ($content = @file('/etc/issue', FILE_IGNORE_NEW_LINES))
+		foreach ($content as $line)
+			if (strpos($line, 'Welcome to ') == 0)
+				return substr($line, 12);
+
 	return php_uname('s').' '.php_uname('r');
 }
 
