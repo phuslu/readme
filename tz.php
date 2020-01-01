@@ -211,7 +211,7 @@ function get_tempinfo()
 		$info['cpu'] = $str[0]/1000.0;
 
 	#if ($str = @file('/sys/class/thermal/thermal_zone10/temp'))
-	#	$info['gpu'] = $str[0]/1000.0;
+	#   $info['gpu'] = $str[0]/1000.0;
 
 	return $info;
 }
@@ -267,19 +267,15 @@ function get_loadavg()
 
 function get_distname()
 {
-	foreach (glob('/etc/*release') as $name) {
-		if ($name == '/etc/centos-release' || $name == '/etc/redhat-release' || $name == '/etc/system-release') {
-			return array_shift(file($name));
-		}
+	foreach (array('redhat', 'centos', 'system') as $name)
+		if ($content = @file("/etc/$name-release"))
+			return array_shift($content);
 
-		$release_info = @parse_ini_file($name);
-
-		if (isset($release_info['DISTRIB_DESCRIPTION']))
-			return $release_info['DISTRIB_DESCRIPTION'];
-
-		if (isset($release_info['PRETTY_NAME']))
-			return $release_info['PRETTY_NAME'];
-	}
+	$release_info = @parse_ini_file('/etc/os-release');
+	if (isset($release_info['DISTRIB_DESCRIPTION']))
+		return $release_info['DISTRIB_DESCRIPTION'];
+	if (isset($release_info['PRETTY_NAME']))
+		return $release_info['PRETTY_NAME'];
 
 	return php_uname('s').' '.php_uname('r');
 }
@@ -288,29 +284,28 @@ function get_boardinfo()
 {
 	$info = array();
 
-	if (is_file('/sys/class/dmi/id/bios_vendor')) {
-		$info['BIOSVendor'] = array_shift(file('/sys/class/dmi/id/bios_vendor', FILE_IGNORE_NEW_LINES));
-		$info['BIOSVersion'] = array_shift(file('/sys/class/dmi/id/bios_version', FILE_IGNORE_NEW_LINES));
-		$info['BIOSDate'] = array_shift(file('/sys/class/dmi/id/bios_date', FILE_IGNORE_NEW_LINES));
-	}
+	if ($content = @file('/sys/class/dmi/id/bios_vendor', FILE_IGNORE_NEW_LINES))
+		$info['BIOSVendor'] = array_shift($content);
+	if ($content = @file('/sys/class/dmi/id/bios_version', FILE_IGNORE_NEW_LINES))
+		$info['BIOSVersion'] = array_shift($content);
+	if ($content = @file('/sys/class/dmi/id/bios_date', FILE_IGNORE_NEW_LINES))
+		$info['BIOSDate'] = array_shift($content);
 
-	if (is_file('/sys/class/dmi/id/board_name')) {
-		$info['boardVendor'] = array_shift(file('/sys/class/dmi/id/board_vendor', FILE_IGNORE_NEW_LINES));
-		$info['boardName'] = array_shift(file('/sys/class/dmi/id/board_name', FILE_IGNORE_NEW_LINES));
-		$info['boardVersion'] = array_shift(file('/sys/class/dmi/id/board_version', FILE_IGNORE_NEW_LINES));
-	} else if (is_file('/sys/class/dmi/id/product_name')) {
-		$info['boardVendor'] = array_shift(file('/sys/class/dmi/id/product_name', FILE_IGNORE_NEW_LINES));
-		$info['boardName'] = '';
-		$info['boardVersion'] = '';
-	}
+	if ($content = @file('/sys/class/dmi/id/board_vendor', FILE_IGNORE_NEW_LINES))
+		$info['boardVendor'] = array_shift($content);
+	if (!isset($info['boardVendor']))
+		if ($content = @file('/sys/class/dmi/id/product_name', FILE_IGNORE_NEW_LINES))
+			$info['boardVendor'] = array_shift($content);
+	if ($content = @file('/sys/class/dmi/id/board_name', FILE_IGNORE_NEW_LINES))
+		$info['boardName'] = array_shift($content);
+	if ($content = @file('/sys/class/dmi/id/board_version', FILE_IGNORE_NEW_LINES))
+		$info['boardVersion'] = array_shift($content);
 
-	if (is_dir('/dev/disk/by-id')) {
-		if ($names=array_filter(scandir('/dev/disk/by-id'), function($k) { return $k[0] != '.' && strpos($k, 'DVD-ROM') === false; })) {
-			$parts = explode("_", array_shift($names));
-			$parts = explode("-", array_shift($parts), 2);
-			$info['diskVendor'] = strtoupper($parts[0]);
-			$info['diskModel'] = $parts[1];
-		}
+	if ($names=array_filter(scandir('/dev/disk/by-id'), function($k) { return $k[0] != '.' && strpos($k, 'DVD-ROM') === false; })) {
+		$parts = explode("_", array_shift($names));
+		$parts = explode("-", array_shift($parts), 2);
+		$info['diskVendor'] = strtoupper($parts[0]);
+		$info['diskModel'] = $parts[1];
 	}
 
 	return $info;
