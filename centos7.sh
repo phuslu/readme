@@ -6,8 +6,8 @@ sudo systemctl disable firewalld || true
 echo -e "* soft nofile 1048576\n* hard nofile 1048576" | tee /etc/security/limits.d/99-phuslu.conf
 curl https://myip.ipip.net | grep 中国 && (
 	cat <<EOF | sudo tee /etc/profile.d/pip.sh
-export PIP_INDEX_URL=https://pypi.tuna.tsinghua.edu.cn/simple/
-export PIPENV_PYPI_MIRROR=https://pypi.tuna.tsinghua.edu.cn/simple/
+export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
+export PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
 export PIPENV_VENV_IN_PROJECT=1
 EOF
 	sudo chmod +x /etc/profile.d/pip.sh

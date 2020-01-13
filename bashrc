@@ -7,7 +7,7 @@
 # curl -fo ~/.git-completion.bash https://raw.githubusercontent.com/git/git/master/contrib/completion/git-completion.bash
 # curl -fo /tmp/vimcat https://raw.githubusercontent.com/vim-scripts/vimcat/master/vimcat && sudo mv /tmp/vimcat /usr/bin && sudo chmod +x /usr/bin/vimcat
 # curl -L https://github.com/BurntSushi/ripgrep/releases/download/11.0.1/ripgrep-11.0.1-x86_64-unknown-linux-musl.tar.gz | sudo tar xvz -C /usr/bin/ --strip-components=1 --wildcards --no-anchored rg
-# sudo env $(hash yum && echo yum || echo apt) install -y bash-completion jq htop ngrep
+# sudo env $(hash yum && echo yum || echo apt) install -y bash-completion wget vim rsync jq htop ngrep lrzsz tmux chrony
 if [ "${HOME%/*}" = "/Users" ]; then alias ls='ls -G' ;else alias ls='ls -p --color=auto'; fi
 alias ll='ls -lF'
 alias rm='rm -i'
