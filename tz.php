@@ -467,6 +467,9 @@ body {
 	margin: 0;
 	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
 }
+html {
+  scroll-behavior: smooth;
+}
 .container {
 	padding-right: 15px;
 	padding-left: 15px;
