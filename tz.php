@@ -463,6 +463,9 @@ $netarp = get_netarp();
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow">
 <style>
+html {
+	scroll-behavior: smooth;
+}
 body {
 	margin: 0;
 	font-family: "Helvetica Neue", "Luxi Sans", "DejaVu Sans", Tahoma, "Hiragino Sans GB", "Microsoft Yahei", sans-serif;
