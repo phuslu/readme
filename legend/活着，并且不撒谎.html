@@ -215,8 +215,8 @@ And if we get cold feet, even taking this step, then we are worthless and hopele
 
 	div = dom.get('div').attr('class', 'container')
 
-	div.add('script').attr('src', 'https://cdn.jsdelivr.net/npm/marked')
-	div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.jsdelivr.net/npm/github-markdown-css')
+	div.add('script').attr('src', 'https://cdn.staticfile.org/marked/0.7.0/marked.min.js')
+	div.add('link').attr('rel', 'stylesheet').attr('href', 'https://cdn.staticfile.org/github-markdown-css/3.0.1/github-markdown.min.css')
 
 	title = decodeURIComponent(document.location.pathname.replace(/.*\//, '').replace(/\.html$/, ''))
 	document.title = '《' + title.replace(/\.md$/, '') + '》'
