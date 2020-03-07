@@ -1,5 +1,5 @@
 yum install -y epel-release
-yum install -y wget vim rsync ngrep jq htop chrony tmux lrzsz bash-completion
+yum install -y bash-completion wget vim rsync ngrep pv jq htop chrony tmux lrzsz
 curl https://phuslu.github.io/sysctl.conf | tee /etc/sysctl.d/10-phuslu.conf
 sed -i -e 's/SELINUX=enforcing/SELINUX=disabled/' /etc/selinux/config
 sudo systemctl disable firewalld || true
@@ -10,7 +10,10 @@ export PIP_INDEX_URL=https://mirrors.aliyun.com/pypi/simple/
 export PIPENV_PYPI_MIRROR=https://mirrors.aliyun.com/pypi/simple/
 export PIPENV_VENV_IN_PROJECT=1
 EOF
-	sudo chmod +x /etc/profile.d/pip.sh
+	cat <<EOF | sudo tee /etc/profile.d/goproxy.sh
+export GOPROXY=https://goproxy.cn,direct
+EOF
+	sudo chmod +x /etc/profile.d/pip.sh /etc/profile.d/goproxy.sh
 )
 test -d /home/centos || (
 	adduser centos
