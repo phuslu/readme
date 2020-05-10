@@ -1,1 +1,1 @@
-see https://phus.lu/tz.php
+see https://phus.lu/tz.php?method=raw
